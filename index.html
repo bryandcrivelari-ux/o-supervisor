@@ -1,247 +1,206 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="O Supervisor — Supervisão clínica com Inteligência Artificial para psicólogos." />
-<meta name="theme-color" content="#0d1117" />
-<title>O Supervisor — Supervisão Clínica com IA</title>
-
-
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="O Supervisor — Supervisão Clínica com IA | Psicologia Insight"/>
+<meta name="theme-color" content="#080b0e"/>
+<title>O Supervisor — Psicologia Insight</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg:          #0d1117;
-    --surface:     #161b22;
-    --surface2:    #1c2333;
-    --border:      #30363d;
-    --accent:      #2f81f7;
-    --accent-soft: #1a3a5c;
-    --accent-glow: rgba(47,129,247,0.15);
-    --gold:        #e3a817;
-    --text:        #e6edf3;
-    --text-muted:  #8b949e;
-    --text-subtle: #484f58;
-    --user-bg:     #1e3a52;
-    --radius:      12px;
-    --radius-msg:  18px;
-    --shadow:      0 8px 32px rgba(0,0,0,0.5);
-    --font:        'Inter', system-ui, -apple-system, sans-serif;
-    --font-mono:   'JetBrains Mono', 'Fira Code', monospace;
-    --danger:      #f85149;
-    --success:     #3fb950;
-  }
-  html, body { height: 100%; overflow: hidden; }
-  body { font-family: var(--font); background: var(--bg); color: var(--text); display: flex; flex-direction: column; height: 100vh; }
-
-  /* ─── SETUP ─── */
-  #setup-screen {
-    position: fixed; inset: 0; z-index: 100;
-    background: var(--bg);
-    display: flex; align-items: center; justify-content: center; padding: 24px;
-  }
-  .setup-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 20px; padding: 48px 44px; max-width: 480px; width: 100%;
-    box-shadow: var(--shadow); text-align: center;
-  }
-  .setup-logo {
-    width: 72px; height: 72px;
-    background: linear-gradient(135deg, #1a3a5c, #2f81f7);
-    border-radius: 20px; display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 24px; font-size: 32px; box-shadow: 0 0 32px var(--accent-glow);
-  }
-  .setup-card h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 6px; }
-  .setup-card h1 span { color: var(--accent); }
-  .setup-card > p { color: var(--text-muted); font-size: 14px; line-height: 1.6; margin-bottom: 28px; }
-  .setup-label { display: block; text-align: left; font-size: 12px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
-  .setup-input {
-    width: 100%; background: var(--surface2); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 12px 16px; color: var(--text);
-    font-size: 14px; font-family: var(--font-mono); outline: none; transition: border-color .2s; margin-bottom: 14px;
-  }
-  .setup-input:focus { border-color: var(--accent); }
-  .setup-input::placeholder { color: var(--text-subtle); }
-  .setup-btn {
-    width: 100%; background: var(--accent); color: #fff; border: none;
-    border-radius: var(--radius); padding: 14px; font-size: 15px; font-weight: 600;
-    cursor: pointer; transition: opacity .2s, transform .1s; margin-top: 6px; font-family: var(--font);
-  }
-  .setup-btn:hover { opacity: .88; }
-  .setup-btn:active { transform: scale(.99); }
-  .setup-hint { margin-top: 18px; font-size: 12px; color: var(--text-subtle); line-height: 1.6; }
-  .setup-hint a { color: var(--accent); text-decoration: none; }
-
-  /* ─── TOPBAR ─── */
-  #topbar {
-    flex: 0 0 auto; height: 60px; background: var(--surface);
-    border-bottom: 1px solid var(--border); display: flex; align-items: center;
-    padding: 0 20px; gap: 14px; position: relative; z-index: 10;
-  }
-  .topbar-logo {
-    width: 36px; height: 36px; background: linear-gradient(135deg, #1a3a5c, #2f81f7);
-    border-radius: 10px; display: flex; align-items: center; justify-content: center;
-    font-size: 16px; flex-shrink: 0; box-shadow: 0 0 12px var(--accent-glow);
-  }
-  .topbar-title { font-size: 16px; font-weight: 700; letter-spacing: -0.3px; }
-  .topbar-title span { color: var(--accent); }
-  .topbar-sub { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
-  .topbar-spacer { flex: 1; }
-  .phase-badge {
-    display: flex; align-items: center; gap: 6px; background: var(--surface2);
-    border: 1px solid var(--border); border-radius: 20px; padding: 5px 12px;
-    font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; transition: all .4s ease;
-  }
-  .phase-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
-  .phase-badge.phase2 { border-color: var(--gold); color: var(--gold); }
-  .phase-badge.phase2 .dot { background: var(--gold); }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
-  .topbar-btn {
-    background: transparent; border: 1px solid var(--border); border-radius: 8px;
-    color: var(--text-muted); padding: 6px 12px; font-size: 12px; cursor: pointer;
-    transition: all .2s; font-family: var(--font);
-  }
-  .topbar-btn:hover { background: var(--surface2); color: var(--text); }
-
-  /* ─── LAYOUT ─── */
-  #main { flex: 1 1 0; display: flex; overflow: hidden; }
-
-  /* ─── SIDEBAR ─── */
-  #sidebar {
-    width: 260px; flex-shrink: 0; background: var(--surface);
-    border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden;
-  }
-  .sidebar-section { padding: 16px; border-bottom: 1px solid var(--border); }
-  .sidebar-section h3 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-muted); margin-bottom: 12px; }
-  .case-field { margin-bottom: 12px; }
-  .case-field label { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
-  .case-field input, .case-field textarea {
-    width: 100%; background: var(--surface2); border: 1px solid var(--border);
-    border-radius: 8px; padding: 8px 10px; color: var(--text); font-size: 12px;
-    font-family: var(--font); outline: none; resize: none; transition: border-color .2s;
-  }
-  .case-field input:focus, .case-field textarea:focus { border-color: var(--accent); }
-  .case-field input::placeholder, .case-field textarea::placeholder { color: var(--text-subtle); }
-  .checklist { list-style: none; }
-  .checklist li {
-    display: flex; align-items: center; gap: 8px; font-size: 12px;
-    color: var(--text-muted); padding: 5px 0; cursor: pointer; transition: color .2s;
-  }
-  .checklist li:hover { color: var(--text); }
-  .checklist li .check-icon {
-    width: 16px; height: 16px; border: 1.5px solid var(--border); border-radius: 4px;
-    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-    font-size: 10px; transition: all .2s;
-  }
-  .checklist li.done .check-icon { background: var(--success); border-color: var(--success); color: #000; }
-  .checklist li.done { color: var(--text-subtle); text-decoration: line-through; }
-  .sidebar-tips { padding: 16px; flex: 1; overflow-y: auto; }
-  .tip-card {
-    background: var(--accent-soft); border: 1px solid rgba(47,129,247,.2);
-    border-radius: var(--radius); padding: 12px; font-size: 12px; color: var(--text-muted);
-    line-height: 1.6; margin-bottom: 10px;
-  }
-  .tip-card strong { color: var(--accent); display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: .4px; }
-
-  /* ─── CHAT ─── */
-  #chat-area { flex: 1 1 0; display: flex; flex-direction: column; overflow: hidden; }
-  #messages { flex: 1 1 0; overflow-y: auto; padding: 24px 20px; scroll-behavior: smooth; }
-  #messages::-webkit-scrollbar { width: 6px; }
-  #messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-  .msg-row { display: flex; gap: 12px; margin-bottom: 20px; align-items: flex-start; animation: fadeUp .3s ease; }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-  .msg-row.user { flex-direction: row-reverse; }
-  .avatar { width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; }
-  .avatar.ai { background: linear-gradient(135deg, #1a3a5c, #2f81f7); box-shadow: 0 0 10px var(--accent-glow); }
-  .avatar.user { background: var(--user-bg); border: 1px solid rgba(47,129,247,.3); }
-  .bubble { max-width: 72%; padding: 14px 16px; border-radius: var(--radius-msg); font-size: 14px; line-height: 1.7; position: relative; }
-  .msg-row.ai .bubble { background: var(--surface); border: 1px solid var(--border); border-top-left-radius: 4px; color: var(--text); }
-  .msg-row.user .bubble { background: var(--user-bg); border: 1px solid rgba(47,129,247,.25); border-top-right-radius: 4px; color: var(--text); }
-  .bubble h2, .bubble h3 { font-size: 13px; font-weight: 700; color: var(--accent); margin: 14px 0 6px; text-transform: uppercase; letter-spacing: .5px; }
-  .bubble h2:first-child, .bubble h3:first-child { margin-top: 0; }
-  .bubble p { margin-bottom: 10px; }
-  .bubble p:last-child { margin-bottom: 0; }
-  .bubble ul, .bubble ol { padding-left: 20px; margin-bottom: 10px; }
-  .bubble li { margin-bottom: 5px; }
-  .bubble strong { color: #c9d1d9; font-weight: 600; }
-  .bubble em { color: var(--text-muted); }
-  .bubble hr { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
-  .bubble code { background: var(--surface2); border-radius: 4px; padding: 1px 6px; font-family: var(--font-mono); font-size: 12px; color: var(--gold); }
-  .bubble.synthesis { border-color: rgba(227,168,23,.3); background: linear-gradient(135deg, var(--surface), #1c1a0e); }
-  .bubble.synthesis h2, .bubble.synthesis h3 { color: var(--gold); }
-  .typing-indicator { display: flex; align-items: center; gap: 6px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-msg); border-top-left-radius: 4px; width: fit-content; }
-  .typing-dot { width: 7px; height: 7px; background: var(--text-muted); border-radius: 50%; animation: blink 1.2s infinite; }
-  .typing-dot:nth-child(2) { animation-delay: .2s; }
-  .typing-dot:nth-child(3) { animation-delay: .4s; }
-  @keyframes blink { 0%, 60%, 100% { opacity: .2; transform: scale(.8); } 30% { opacity: 1; transform: scale(1); } }
-
-  /* ─── INPUT ─── */
-  #input-area { flex: 0 0 auto; background: var(--surface); border-top: 1px solid var(--border); padding: 16px 20px; }
-  .input-wrapper { display: flex; gap: 10px; align-items: flex-end; background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; padding: 10px 10px 10px 16px; transition: border-color .2s; }
-  .input-wrapper:focus-within { border-color: var(--accent); }
-  #user-input { flex: 1; background: transparent; border: none; outline: none; color: var(--text); font-size: 14px; font-family: var(--font); line-height: 1.6; resize: none; max-height: 160px; overflow-y: auto; }
-  #user-input::placeholder { color: var(--text-subtle); }
-  #send-btn { width: 38px; height: 38px; background: var(--accent); border: none; border-radius: 10px; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: opacity .2s, transform .1s; font-size: 16px; }
-  #send-btn:hover { opacity: .85; }
-  #send-btn:active { transform: scale(.95); }
-  #send-btn:disabled { opacity: .4; cursor: not-allowed; }
-  .input-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding: 0 4px; }
-  .input-hint { font-size: 11px; color: var(--text-subtle); }
-  .input-hint kbd { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; font-family: var(--font-mono); font-size: 10px; }
-
-  /* ─── EXPORT MODAL ─── */
-  #export-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 200; align-items: center; justify-content: center; padding: 24px; }
-  #export-modal.open { display: flex; }
-  .modal-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; max-width: 520px; width: 100%; box-shadow: var(--shadow); }
-  .modal-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
-  .modal-card textarea { width: 100%; height: 280px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; color: var(--text); font-size: 12px; font-family: var(--font-mono); resize: none; outline: none; line-height: 1.6; }
-  .modal-actions { display: flex; gap: 10px; margin-top: 16px; justify-content: flex-end; }
-  .modal-btn { padding: 9px 20px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity .2s; border: none; font-family: var(--font); }
-  .modal-btn.primary { background: var(--accent); color: #fff; }
-  .modal-btn.secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-  .modal-btn:hover { opacity: .85; }
-
-  /* ─── TOAST ─── */
-  #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 10px 20px; font-size: 13px; color: var(--text); z-index: 300; transition: transform .3s ease; pointer-events: none; }
-  #toast.show { transform: translateX(-50%) translateY(0); }
-
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-  .hidden { display: none !important; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:       #080b0e;
+  --surface:  #0e1318;
+  --surface2: #141b23;
+  --border:   #2a1a1a;
+  --border2:  #3d1f1f;
+  --accent:   #9b1c1c;
+  --accent-b: #dc2626;
+  --accent-s: #2d0a0a;
+  --accent-g: rgba(155,28,28,0.18);
+  --gold:     #c9a84c;
+  --gold-s:   #2e2308;
+  --text:     #e8dede;
+  --text-m:   #9c8585;
+  --text-sub: #4a3535;
+  --user-bg:  #1f0a0a;
+  --success:  #3fb950;
+  --radius:   12px;
+  --shadow:   0 8px 40px rgba(0,0,0,0.7);
+  --font:     'Inter',system-ui,-apple-system,sans-serif;
+  --mono:     'JetBrains Mono','Fira Code',monospace;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex;flex-direction:column;height:100vh}
+.eye-logo svg{display:block}
+#setup-screen{position:fixed;inset:0;z-index:100;background:radial-gradient(ellipse at 50% 30%, #1a0505 0%, #080b0e 70%);display:flex;align-items:center;justify-content:center;padding:24px;}
+.setup-card{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:48px 44px;max-width:460px;width:100%;box-shadow:var(--shadow),0 0 60px rgba(155,28,28,0.12);text-align:center;}
+.setup-eye{width:80px;height:80px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 20px rgba(155,28,28,0.6));}
+.setup-brand{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text-m);margin-bottom:8px;}
+.setup-card h1{font-size:28px;font-weight:700;letter-spacing:-0.5px;margin-bottom:4px;color:var(--text);}
+.setup-card h1 span{color:var(--accent-b)}
+.setup-card>p{color:var(--text-m);font-size:13px;line-height:1.6;margin-bottom:32px}
+.setup-label{display:block;text-align:left;font-size:11px;font-weight:600;color:var(--text-m);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;}
+.setup-input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);padding:12px 16px;color:var(--text);font-size:14px;font-family:var(--font);outline:none;transition:border-color .2s;margin-bottom:14px;}
+.setup-input:focus{border-color:var(--accent-b)}
+.setup-input::placeholder{color:var(--text-sub)}
+.setup-btn{width:100%;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:14px;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s,transform .1s;margin-top:6px;font-family:var(--font);letter-spacing:.3px;}
+.setup-btn:hover{background:#b91c1c}
+.setup-btn:active{transform:scale(.99)}
+.setup-err{margin-top:14px;font-size:13px;color:#f87171;min-height:20px;transition:opacity .2s;}
+.setup-footer{margin-top:20px;font-size:11px;color:var(--text-sub);line-height:1.6;}
+.setup-divider{border:none;border-top:1px solid var(--border);margin:28px 0;}
+#topbar{flex:0 0 auto;height:58px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 18px;gap:12px;position:relative;z-index:10;}
+.topbar-eye{width:34px;height:34px;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 8px rgba(155,28,28,0.5));flex-shrink:0;}
+.topbar-title{font-size:15px;font-weight:700;letter-spacing:-.3px}
+.topbar-title span{color:var(--accent-b)}
+.topbar-sub{font-size:11px;color:var(--text-m);margin-top:1px;letter-spacing:.3px;text-transform:uppercase}
+.topbar-spacer{flex:1}
+.phase-badge{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border2);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;transition:all .4s ease;color:var(--text-m);}
+.phase-badge .dot{width:7px;height:7px;border-radius:50%;background:var(--accent-b);animation:pulse 2s infinite}
+.phase-badge.phase2{border-color:var(--gold);color:var(--gold)}
+.phase-badge.phase2 .dot{background:var(--gold)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.topbar-btn{background:transparent;border:1px solid var(--border2);border-radius:8px;color:var(--text-m);padding:6px 12px;font-size:12px;cursor:pointer;transition:all .2s;font-family:var(--font);}
+.topbar-btn:hover{background:var(--surface2);color:var(--text);border-color:var(--accent)}
+#main{flex:1 1 0;display:flex;overflow:hidden}
+#sidebar{width:255px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.sb-section{padding:14px 16px;border-bottom:1px solid var(--border)}
+.sb-section h3{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-m);margin-bottom:10px;}
+.cf{margin-bottom:10px}
+.cf label{display:block;font-size:11px;color:var(--text-m);margin-bottom:3px}
+.cf input,.cf textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:7px 10px;color:var(--text);font-size:12px;font-family:var(--font);outline:none;resize:none;transition:border-color .2s;}
+.cf input:focus,.cf textarea:focus{border-color:var(--accent-b)}
+.cf input::placeholder,.cf textarea::placeholder{color:var(--text-sub)}
+.chk-list{list-style:none}
+.chk-list li{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-m);padding:4px 0;cursor:pointer;transition:color .2s;}
+.chk-list li:hover{color:var(--text)}
+.chk-icon{width:15px;height:15px;border:1.5px solid var(--border2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;transition:all .2s;}
+.chk-list li.done .chk-icon{background:var(--success);border-color:var(--success);color:#000}
+.chk-list li.done{color:var(--text-sub);text-decoration:line-through}
+.sb-tips{padding:14px 16px;flex:1;overflow-y:auto}
+.tip{background:var(--accent-s);border:1px solid rgba(155,28,28,.2);border-radius:var(--radius);padding:11px;font-size:12px;color:var(--text-m);line-height:1.6;margin-bottom:9px;}
+.tip strong{color:var(--accent-b);display:block;margin-bottom:3px;font-size:10px;text-transform:uppercase;letter-spacing:.5px}
+#chat-area{flex:1 1 0;display:flex;flex-direction:column;overflow:hidden}
+#messages{flex:1 1 0;overflow-y:auto;padding:22px 20px;scroll-behavior:smooth}
+#messages::-webkit-scrollbar{width:5px}
+#messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.msg-row{display:flex;gap:11px;margin-bottom:18px;align-items:flex-start;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg-row.user{flex-direction:row-reverse}
+.avatar{width:32px;height:32px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.avatar.ai{background:var(--accent-s);border:1px solid var(--border2);filter:drop-shadow(0 0 6px rgba(155,28,28,.3))}
+.avatar.user{background:var(--user-bg);border:1px solid var(--border2)}
+.bubble{max-width:74%;padding:13px 15px;border-radius:17px;font-size:14px;line-height:1.72;}
+.msg-row.ai .bubble{background:var(--surface);border:1px solid var(--border);border-top-left-radius:4px;color:var(--text)}
+.msg-row.user .bubble{background:var(--user-bg);border:1px solid var(--border2);border-top-right-radius:4px;color:var(--text)}
+.bubble h2,.bubble h3{font-size:12px;font-weight:700;color:var(--accent-b);margin:13px 0 5px;text-transform:uppercase;letter-spacing:.5px}
+.bubble h2:first-child,.bubble h3:first-child{margin-top:0}
+.bubble p{margin-bottom:9px}
+.bubble p:last-child{margin-bottom:0}
+.bubble ul,.bubble ol{padding-left:18px;margin-bottom:9px}
+.bubble li{margin-bottom:4px}
+.bubble strong{color:#e8d5d5;font-weight:600}
+.bubble em{color:var(--text-m)}
+.bubble hr{border:none;border-top:1px solid var(--border);margin:12px 0}
+.bubble code{background:var(--surface2);border-radius:4px;padding:1px 5px;font-family:var(--mono);font-size:12px;color:var(--gold)}
+.bubble.synthesis{border-color:rgba(201,168,76,.25);background:linear-gradient(135deg,var(--surface),#1a1508)}
+.bubble.synthesis h2,.bubble.synthesis h3{color:var(--gold)}
+.typing-indicator{display:flex;align-items:center;gap:6px;padding:13px 15px;background:var(--surface);border:1px solid var(--border);border-radius:17px;border-top-left-radius:4px;width:fit-content}
+.typing-dot{width:6px;height:6px;background:var(--text-m);border-radius:50%;animation:blink 1.2s infinite}
+.typing-dot:nth-child(2){animation-delay:.2s}
+.typing-dot:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,60%,100%{opacity:.2;transform:scale(.8)}30%{opacity:1;transform:scale(1)}}
+#input-area{flex:0 0 auto;background:var(--surface);border-top:1px solid var(--border);padding:14px 18px}
+.input-wrap{display:flex;gap:9px;align-items:flex-end;background:var(--surface2);border:1px solid var(--border2);border-radius:13px;padding:9px 9px 9px 15px;transition:border-color .2s;}
+.input-wrap:focus-within{border-color:var(--accent-b)}
+#user-input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px;font-family:var(--font);line-height:1.6;resize:none;max-height:150px;overflow-y:auto}
+#user-input::placeholder{color:var(--text-sub)}
+#send-btn{width:36px;height:36px;background:var(--accent);border:none;border-radius:9px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s,transform .1s;font-size:15px;}
+#send-btn:hover{background:#b91c1c}
+#send-btn:active{transform:scale(.94)}
+#send-btn:disabled{opacity:.4;cursor:not-allowed}
+.input-footer{display:flex;justify-content:space-between;align-items:center;margin-top:6px;padding:0 3px}
+.input-hint{font-size:11px;color:var(--text-sub)}
+.input-hint kbd{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-family:var(--mono);font-size:10px}
+#export-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;padding:24px}
+#export-modal.open{display:flex}
+.modal-card{background:var(--surface);border:1px solid var(--border2);border-radius:15px;padding:26px;max-width:500px;width:100%;box-shadow:var(--shadow)}
+.modal-card h3{font-size:17px;font-weight:700;margin-bottom:14px}
+.modal-card textarea{width:100%;height:260px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);padding:11px;color:var(--text);font-size:12px;font-family:var(--mono);resize:none;outline:none;line-height:1.6}
+.modal-actions{display:flex;gap:9px;margin-top:14px;justify-content:flex-end}
+.m-btn{padding:8px 18px;border-radius:var(--radius);font-size:13px;font-weight:600;cursor:pointer;transition:opacity .2s;border:none;font-family:var(--font)}
+.m-btn.primary{background:var(--accent);color:#fff}
+.m-btn.secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border2)}
+.m-btn:hover{opacity:.85}
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface2);border:1px solid var(--border2);border-radius:9px;padding:9px 18px;font-size:13px;color:var(--text);z-index:300;transition:transform .3s ease;pointer-events:none}
+#toast.show{transform:translateX(-50%) translateY(0)}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.hidden{display:none!important}
 </style>
 </head>
 <body>
-
-<!-- SETUP -->
+<template id="tpl-eye-lg">
+<svg viewBox="0 0 100 65" xmlns="http://www.w3.org/2000/svg" width="72" height="47">
+  <defs>
+    <radialGradient id="gIris" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#dc2626"/>
+      <stop offset="60%" stop-color="#7f1d1d"/>
+      <stop offset="100%" stop-color="#450a0a"/>
+    </radialGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="1.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <path d="M4,32 C18,6 45,2 50,32 C45,62 18,58 4,32 Z" fill="none" stroke="#7f1d1d" stroke-width="1.2" opacity=".5"/>
+  <path d="M96,32 C82,6 55,2 50,32 C55,62 82,58 96,32 Z" fill="none" stroke="#7f1d1d" stroke-width="1.2" opacity=".5"/>
+  <path d="M8,32 C22,8 78,8 92,32 C78,56 22,56 8,32 Z" fill="none" stroke="#9b1c1c" stroke-width="1.8" filter="url(#glow)"/>
+  <ellipse cx="50" cy="32" rx="18" ry="13" fill="none" stroke="#dc2626" stroke-width="1.2" opacity=".7"/>
+  <circle cx="50" cy="32" r="11" fill="url(#gIris)"/>
+  <circle cx="50" cy="32" r="5.5" fill="#1a0303"/>
+  <circle cx="53" cy="29" r="1.8" fill="rgba(255,255,255,0.7)"/>
+  <line x1="50" y1="19" x2="50" y2="14" stroke="#9b1c1c" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="40" y1="21" x2="37" y2="16" stroke="#9b1c1c" stroke-width="1" stroke-linecap="round" opacity=".7"/>
+  <line x1="60" y1="21" x2="63" y2="16" stroke="#9b1c1c" stroke-width="1" stroke-linecap="round" opacity=".7"/>
+</svg>
+</template>
+<template id="tpl-eye-sm">
+<svg viewBox="0 0 100 65" xmlns="http://www.w3.org/2000/svg" width="28" height="18">
+  <defs>
+    <radialGradient id="gIris2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#450a0a"/>
+    </radialGradient>
+  </defs>
+  <path d="M8,32 C22,8 78,8 92,32 C78,56 22,56 8,32 Z" fill="none" stroke="#9b1c1c" stroke-width="2.5"/>
+  <circle cx="50" cy="32" r="11" fill="url(#gIris2)"/>
+  <circle cx="50" cy="32" r="5" fill="#1a0303"/>
+  <circle cx="53" cy="29" r="1.8" fill="rgba(255,255,255,0.65)"/>
+</svg>
+</template>
 <div id="setup-screen">
   <div class="setup-card">
-    <div class="setup-logo">🧠</div>
+    <div class="setup-eye eye-logo" id="setup-eye-slot"></div>
+    <div class="setup-brand">Psicologia Insight</div>
     <h1><span>O</span> Supervisor</h1>
-    <p>Supervisão clínica com Inteligência Artificial.<br/>
-       Insira sua chave gratuita do Google AI Studio para começar.</p>
-
-    <label class="setup-label" for="api-key-input">Chave do Google AI Studio</label>
-    <input type="password" id="api-key-input" class="setup-input" placeholder="AIzaSy..." autocomplete="off" />
-
-    <label class="setup-label" for="therapist-name-input">Seu nome (opcional)</label>
-    <input type="text" id="therapist-name-input" class="setup-input" placeholder="Ex: Dra. Ana" />
-
-    <button class="setup-btn" onclick="startSession()">Iniciar Supervisão →</button>
-
-    <p class="setup-hint">
-      Chave gratuita em <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a>
-      · Nunca armazenada
-    </p>
+    <p>Supervisão clínica com Inteligência Artificial.<br/>Entre com suas credenciais para começar.</p>
+    <hr class="setup-divider"/>
+    <label class="setup-label" for="inp-user">Usuário</label>
+    <input type="text" id="inp-user" class="setup-input" placeholder="supervisor" autocomplete="username"/>
+    <label class="setup-label" for="inp-pass">Senha</label>
+    <input type="password" id="inp-pass" class="setup-input" placeholder="••••••••" autocomplete="current-password"/>
+    <label class="setup-label" for="inp-name">Seu nome (opcional)</label>
+    <input type="text" id="inp-name" class="setup-input" placeholder="Ex: Dra. Ana"/>
+    <button class="setup-btn" onclick="startSession()">Entrar →</button>
+    <div class="setup-err" id="setup-err"></div>
+    <p class="setup-footer">Psicologia Insight · Supervisão Clínica com IA</p>
   </div>
 </div>
-
-<!-- TOPBAR -->
 <div id="topbar" class="hidden">
-  <div class="topbar-logo">🧠</div>
+  <div class="topbar-eye eye-logo" id="topbar-eye-slot"></div>
   <div>
     <div class="topbar-title"><span>O</span> Supervisor</div>
-    <div class="topbar-sub">Supervisão Clínica com IA</div>
+    <div class="topbar-sub">Psicologia Insight</div>
   </div>
   <div class="topbar-spacer"></div>
   <div class="phase-badge" id="phase-badge">
@@ -251,61 +210,36 @@
   <button class="topbar-btn" onclick="openExport()">⬇ Exportar</button>
   <button class="topbar-btn" onclick="clearSession()">↺ Nova Sessão</button>
 </div>
-
-<!-- MAIN -->
 <div id="main" class="hidden">
   <div id="sidebar">
-    <div class="sidebar-section">
+    <div class="sb-section">
       <h3>Dados do Caso</h3>
-      <div class="case-field">
-        <label>Paciente (sigla/código)</label>
-        <input type="text" id="cf-patient" placeholder="Ex: Paciente A" />
-      </div>
-      <div class="case-field">
-        <label>Abordagem clínica</label>
-        <input type="text" id="cf-approach" placeholder="Ex: TCC, Psicanálise..." />
-      </div>
-      <div class="case-field">
-        <label>Queixa principal</label>
-        <textarea id="cf-complaint" rows="2" placeholder="Queixa em poucas palavras..."></textarea>
-      </div>
+      <div class="cf"><label>Paciente (sigla/código)</label><input type="text" id="cf-patient" placeholder="Ex: Paciente A"/></div>
+      <div class="cf"><label>Abordagem clínica</label><input type="text" id="cf-approach" placeholder="Ex: TCC, Psicanálise..."/></div>
+      <div class="cf"><label>Queixa principal</label><textarea id="cf-complaint" rows="2" placeholder="Queixa em poucas palavras..."></textarea></div>
     </div>
-    <div class="sidebar-section">
+    <div class="sb-section">
       <h3>Checklist do Caso</h3>
-      <ul class="checklist" id="checklist">
-        <li onclick="toggleCheck(this)"><div class="check-icon"></div> Queixa principal mapeada</li>
-        <li onclick="toggleCheck(this)"><div class="check-icon"></div> Fatores mantenedores</li>
-        <li onclick="toggleCheck(this)"><div class="check-icon"></div> Histórico relevante</li>
-        <li onclick="toggleCheck(this)"><div class="check-icon"></div> Aliança terapêutica avaliada</li>
-        <li onclick="toggleCheck(this)"><div class="check-icon"></div> Hipótese diagnóstica</li>
-        <li onclick="toggleCheck(this)"><div class="check-icon"></div> Plano de intervenção</li>
-        <li onclick="toggleCheck(this)"><div class="check-icon"></div> Pontos cegos discutidos</li>
+      <ul class="chk-list">
+        <li onclick="toggleCheck(this)"><div class="chk-icon"></div> Queixa principal mapeada</li>
+        <li onclick="toggleCheck(this)"><div class="chk-icon"></div> Fatores mantenedores</li>
+        <li onclick="toggleCheck(this)"><div class="chk-icon"></div> Histórico relevante</li>
+        <li onclick="toggleCheck(this)"><div class="chk-icon"></div> Aliança terapêutica avaliada</li>
+        <li onclick="toggleCheck(this)"><div class="chk-icon"></div> Hipótese diagnóstica</li>
+        <li onclick="toggleCheck(this)"><div class="chk-icon"></div> Plano de intervenção</li>
+        <li onclick="toggleCheck(this)"><div class="chk-icon"></div> Pontos cegos discutidos</li>
       </ul>
     </div>
-    <div class="sidebar-tips">
-      <div class="tip-card">
-        <strong>💡 Dica de Supervisão</strong>
-        Apresente o caso com riqueza de detalhes. Quanto mais contexto, mais precisa a conceitualização.
-      </div>
-      <div class="tip-card">
-        <strong>🔒 Privacidade</strong>
-        Não inclua nome real, CPF ou dados identificáveis do paciente.
-      </div>
-      <div class="tip-card" style="border-color:rgba(63,185,80,.2); background:rgba(63,185,80,.07)">
-        <strong style="color:var(--success)">✦ Gemini 1.5 Flash</strong>
-        Motor gratuito via Google AI Studio.
-      </div>
+    <div class="sb-tips">
+      <div class="tip"><strong>💡 Dica</strong>Apresente o caso com riqueza de detalhes. Quanto mais contexto, mais precisa a conceitualização.</div>
+      <div class="tip"><strong>🔒 Privacidade</strong>Não inclua nome real, CPF ou dados identificáveis do paciente.</div>
     </div>
   </div>
-
   <div id="chat-area">
     <div id="messages"></div>
     <div id="input-area">
-      <div class="input-wrapper">
-        <textarea id="user-input" rows="1"
-          placeholder="Descreva o caso ou sua dúvida clínica..."
-          onkeydown="handleKey(event)"
-          oninput="autoResize(this)"></textarea>
+      <div class="input-wrap">
+        <textarea id="user-input" rows="1" placeholder="Descreva o caso ou sua dúvida clínica..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
         <button id="send-btn" onclick="sendMessage()">↑</button>
       </div>
       <div class="input-footer">
@@ -314,147 +248,50 @@
     </div>
   </div>
 </div>
-
-<!-- EXPORT MODAL -->
 <div id="export-modal">
   <div class="modal-card">
     <h3>📋 Exportar Supervisão</h3>
     <textarea id="export-content" readonly></textarea>
     <div class="modal-actions">
-      <button class="modal-btn secondary" onclick="closeExport()">Fechar</button>
-      <button class="modal-btn primary" onclick="copyExport()">Copiar texto</button>
+      <button class="m-btn secondary" onclick="closeExport()">Fechar</button>
+      <button class="m-btn primary" onclick="copyExport()">Copiar texto</button>
     </div>
   </div>
 </div>
-
 <div id="toast"></div>
-
 <script>
-// ═══════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════
-let API_KEY = '';
+function injectEye(slotId, tplId) {
+  const slot = document.getElementById(slotId);
+  const tpl  = document.getElementById(tplId);
+  if (slot && tpl) slot.appendChild(tpl.content.cloneNode(true));
+}
+injectEye('setup-eye-slot',  'tpl-eye-lg');
+injectEye('topbar-eye-slot', 'tpl-eye-sm');
+let AUTH = { username: '', password: '' };
 let THERAPIST_NAME = 'você';
 let messages = [];
 let isStreaming = false;
 let currentPhase = 1;
-
-// ═══════════════════════════════════════════════════
-// SYSTEM PROMPT
-// ═══════════════════════════════════════════════════
-function buildSystemPrompt(name) {
-  return `Você é "O Supervisor", um sistema avançado de inteligência artificial especializado em supervisão clínica para psicólogos. Sua arquitetura combina a precisão analítica e clareza estrutural do Jarvis (Homem de Ferro) com a sensibilidade e profundidade de um supervisor humano experiente.
-Seu objetivo é auxiliar o psicólogo a organizar o raciocínio clínico, trazer clareza às ideias, mapear o caso e evidenciar pontos cegos.
-O nome do psicólogo nesta sessão é: ${name}.
-
-## TOM E POSTURA (CRÍTICO)
-- Acolhedor e Reforçador: Sempre valide o terapeuta, reforce positivamente suas iniciativas, insights e a coragem de compartilhar suas vulnerabilidades e incertezas. Crie segurança psicológica.
-- Linguagem: Direta, clara, calorosa no suporte, cirúrgica e lógica na análise técnica.
-- Sempre escreva em português brasileiro.
-
-# DIRETRIZES DE CONHECIMENTO BASE
-Você possui domínio profundo em todas as áreas da psicologia (Psicanálise, Análise do Comportamento, Fenomenologia etc.), com especial refinamento em modelos cognitivo-comportamentais. Expertise em:
-1. Avaliação e manejo do vínculo terapêutico.
-2. Psicologia de alta performance e contextos específicos.
-
-# DINÂMICA DE ATUAÇÃO (SISTEMA HÍBRIDO)
-## FASE 1: MAPEAMENTO SOCRÁTICO E ACOLHIMENTO
-- Proibido: diagnósticos fechados, conclusões precipitadas ou sugestões de técnicas.
-- Valide o terapeuta, faça perguntas socráticas estratégicas — máximo 1 ou 2 por vez.
-- Foque em fatores de manutenção, gatilhos, crenças latentes e aliança terapêutica.
-- Quando tiver dados suficientes, inclua EXATAMENTE este marcador no início da mensagem: [FASE2_ATIVADA]
-
-## FASE 2: SÍNTESE, DIRETIVIDADE E PLANO DE AÇÃO
-Entregue obrigatoriamente:
-1. **CONCEITUALIZAÇÃO DO CASO**: mapa dos fatores mantenedores, variáveis de controle e ciclo do problema.
-2. **PONTOS CEGOS**: dinâmicas que o terapeuta pode ter deixado passar (incluindo contratransferências).
-3. **PLANO DE INTERVENÇÃO**: metas em Curto, Médio e Longo Prazo.
-4. **SUGESTÕES DE TÉCNICAS E PROTOCOLOS**: ferramentas científicas específicas para a demanda.
-
-# SEGURANÇA E ÉTICA
-- Se o psicólogo fornecer dados identificáveis (nome real, CPF), lembre acolhedoramente sobre anonimização.
-- Lembre que a responsabilidade clínica final é sempre do profissional humano.
-- Use markdown nas respostas (negrito, listas, ## seções).`;
-}
-
-// ═══════════════════════════════════════════════════
-// GEMINI REST API — fetch direto, sem SDK
-// ═══════════════════════════════════════════════════
-async function callGemini(msgs, overrideUser) {
-  const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
-  const system = buildSystemPrompt(THERAPIST_NAME);
-
-  let contents;
-  if (overrideUser) {
-    contents = [{ role: 'user', parts: [{ text: overrideUser }] }];
-  } else {
-    // Constrói histórico alternado user/model
-    const raw = msgs.map(m => ({
-      role: m.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: m.content }]
-    }));
-    // Merge de turnos consecutivos iguais
-    contents = [];
-    for (const t of raw) {
-      if (contents.length === 0 || contents[contents.length - 1].role !== t.role) {
-        contents.push({ role: t.role, parts: [{ text: t.parts[0].text }] });
-      } else {
-        contents[contents.length - 1].parts[0].text += '\n\n' + t.parts[0].text;
-      }
-    }
-    // Garante que começa com user
-    while (contents.length > 0 && contents[0].role !== 'user') contents.shift();
-  }
-
-  const body = {
-    system_instruction: { parts: [{ text: system }] },
-    contents,
-    generationConfig: { maxOutputTokens: 2048, temperature: 0.7 }
-  };
-
-  const res = await fetch(ENDPOINT, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
-
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err?.error?.message || `HTTP ${res.status}`);
-  }
-
-  const data = await res.json();
-  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) throw new Error('Resposta vazia da API.');
-  return text;
-}
-
-// ═══════════════════════════════════════════════════
-// SESSION
-// ═══════════════════════════════════════════════════
 function startSession() {
-  const key = document.getElementById('api-key-input').value.trim();
-  const name = document.getElementById('therapist-name-input').value.trim();
-  if (!key || !key.startsWith('AIza')) {
-    showToast('⚠️ Chave inválida — deve começar com AIza');
-    return;
-  }
-  API_KEY = key;
-  THERAPIST_NAME = name || 'você';
+  const u = document.getElementById('inp-user').value.trim();
+  const p = document.getElementById('inp-pass').value.trim();
+  const n = document.getElementById('inp-name').value.trim();
+  const err = document.getElementById('setup-err');
+  if (!u || !p) { err.textContent = 'Preencha usuário e senha.'; return; }
+  err.textContent = '';
+  AUTH = { username: u, password: p };
+  THERAPIST_NAME = n || 'você';
   document.getElementById('setup-screen').classList.add('hidden');
   document.getElementById('topbar').classList.remove('hidden');
   document.getElementById('main').classList.remove('hidden');
   sendWelcome();
 }
-
 function sendWelcome() {
-  // Boas-vindas estáticas — sem custo de API, instantâneas
-  const nome = THERAPIST_NAME !== 'você' ? `, ${THERAPIST_NAME}` : '';
-  const texto = `Olá${nome}! Sou **O Supervisor** — seu parceiro de supervisão clínica com IA.\n\nEstou aqui para te ajudar a organizar o raciocínio clínico, mapear o caso e evidenciar pontos cegos. Trabalhamos em duas fases: primeiro faço um **mapeamento socrático** junto com você, e quando o caso estiver maduro, entrego uma **síntese completa** com conceitualização, pontos cegos e plano de intervenção.\n\nQuando estiver pronto, me conte o caso ou a dúvida clínica que quer trabalhar hoje.`;
-  appendMessage('ai', texto);
-  messages.push({ role: 'assistant', content: texto });
+  const nome = THERAPIST_NAME !== 'você' ? ', ' + THERAPIST_NAME : '';
+  const txt = 'Olá' + nome + '! Sou **O Supervisor** — seu parceiro de supervisão clínica com IA, da Psicologia Insight.\n\nEstou aqui para te ajudar a organizar o raciocínio clínico, mapear o caso e evidenciar pontos cegos. Trabalhamos em duas fases: primeiro faço um **mapeamento socrático** junto com você, e quando o caso estiver maduro, entrego uma **síntese completa** com conceitualização, pontos cegos e plano de intervenção.\n\nQuando estiver pronto, me conte o caso ou a dúvida clínica que quer trabalhar hoje.';
+  appendMessage('ai', txt);
+  messages.push({ role: 'assistant', content: txt });
 }
-
 async function sendMessage() {
   if (isStreaming) return;
   const input = document.getElementById('user-input');
@@ -467,7 +304,7 @@ async function sendMessage() {
   isStreaming = true;
   document.getElementById('send-btn').disabled = true;
   try {
-    const reply = await callGemini(messages.slice(-20));
+    const reply = await callAPI(messages.slice(-20));
     removeTypingIndicator();
     if (reply.includes('[FASE2_ATIVADA]') && currentPhase === 1) {
       activatePhase2();
@@ -480,138 +317,109 @@ async function sendMessage() {
     }
   } catch(e) {
     removeTypingIndicator();
-    const msg = (e?.message || '').toLowerCase();
-    const isRateLimit = msg.includes('quota') || msg.includes('rate') || msg.includes('resource_exhausted') || msg.includes('429');
-    if (isRateLimit) {
-      appendMessage('ai', '⏳ Limite de requisições atingido. Aguarde 1 minuto e envie sua mensagem novamente.');
+    if (e.message === '401') {
+      appendMessage('ai', '🔒 Sessão expirada. Recarregue a página e entre novamente.');
     } else {
-      appendMessage('ai', `⚠️ **Erro:** ${diagnosisError(e)}`);
+      appendMessage('ai', '⚠️ ' + e.message);
     }
   }
   isStreaming = false;
   document.getElementById('send-btn').disabled = false;
   input.focus();
 }
-
-function clearSession() {
-  if (!confirm('Iniciar nova sessão? O histórico será apagado.')) return;
-  messages = []; currentPhase = 1;
-  document.getElementById('messages').innerHTML = '';
-  document.getElementById('phase-badge').classList.remove('phase2');
-  document.getElementById('phase-label').textContent = 'Fase 1 — Mapeamento';
-  ['cf-patient','cf-approach','cf-complaint'].forEach(id => document.getElementById(id).value = '');
-  document.querySelectorAll('.checklist li').forEach(li => { li.classList.remove('done'); li.querySelector('.check-icon').textContent = ''; });
-  sendWelcome();
+async function callAPI(msgs, overrideUser) {
+  const body = { username: AUTH.username, password: AUTH.password, therapistName: THERAPIST_NAME, contents: msgs, overrideUser: overrideUser || null };
+  const res = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data?.error || 'Erro ' + res.status);
+  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) throw new Error('Resposta vazia da API.');
+  return text;
 }
-
-// ═══════════════════════════════════════════════════
-// PHASE 2
-// ═══════════════════════════════════════════════════
 function activatePhase2() {
   currentPhase = 2;
   document.getElementById('phase-badge').classList.add('phase2');
   document.getElementById('phase-label').textContent = 'Fase 2 — Síntese';
   showToast('🎯 Fase 2 ativada — Síntese e Plano de Ação');
 }
-
-// ═══════════════════════════════════════════════════
-// DOM
-// ═══════════════════════════════════════════════════
 function appendMessage(role, content, isSynthesis = false) {
   const el = document.getElementById('messages');
-  const row = document.createElement('div');
-  row.className = `msg-row ${role}`;
-  const av = document.createElement('div');
-  av.className = `avatar ${role}`;
-  av.textContent = role === 'ai' ? '🧠' : (THERAPIST_NAME.charAt(0).toUpperCase() || '👤');
+  const row = document.createElement('div'); row.className = 'msg-row ' + role;
+  const av  = document.createElement('div'); av.className = 'avatar ' + role;
+  if (role === 'ai') {
+    const tpl = document.getElementById('tpl-eye-sm');
+    av.appendChild(tpl.content.cloneNode(true));
+  } else {
+    av.textContent = THERAPIST_NAME.charAt(0).toUpperCase() || '👤';
+    av.style.fontSize = '13px'; av.style.fontWeight = '700'; av.style.color = '#e8dede';
+  }
   const bubble = document.createElement('div');
-  bubble.className = `bubble${isSynthesis ? ' synthesis' : ''}`;
+  bubble.className = 'bubble' + (isSynthesis ? ' synthesis' : '');
   bubble.innerHTML = parseMarkdown(content);
   row.appendChild(av); row.appendChild(bubble);
   el.appendChild(row); el.scrollTop = el.scrollHeight;
 }
 function appendTypingIndicator() {
   const el = document.getElementById('messages');
-  const row = document.createElement('div');
-  row.className = 'msg-row ai'; row.id = 'typing-row';
-  const av = document.createElement('div'); av.className = 'avatar ai'; av.textContent = '🧠';
-  const ind = document.createElement('div'); ind.className = 'typing-indicator';
-  ind.innerHTML = `<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>`;
+  const row = document.createElement('div'); row.className='msg-row ai'; row.id='typing-row';
+  const av = document.createElement('div'); av.className='avatar ai';
+  const tpl = document.getElementById('tpl-eye-sm');
+  av.appendChild(tpl.content.cloneNode(true));
+  const ind = document.createElement('div'); ind.className='typing-indicator';
+  ind.innerHTML='<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
   row.appendChild(av); row.appendChild(ind);
-  el.appendChild(row); el.scrollTop = el.scrollHeight;
+  el.appendChild(row); el.scrollTop=el.scrollHeight;
 }
-function removeTypingIndicator() { const e = document.getElementById('typing-row'); if(e) e.remove(); }
-
-// ═══════════════════════════════════════════════════
-// MARKDOWN
-// ═══════════════════════════════════════════════════
-function parseMarkdown(text) {
-  let html = text
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+function removeTypingIndicator(){const e=document.getElementById('typing-row');if(e)e.remove()}
+function parseMarkdown(text){
+  let h=text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     .replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>')
-    .replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>')
-    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/***(.+?)***/g,'<strong><em>$1</em></strong>')
+    .replace(/**(.+?)**/g,'<strong>$1</strong>').replace(/*(.+?)*/g,'<em>$1</em>')
     .replace(/`(.+?)`/g,'<code>$1</code>').replace(/^---$/gm,'<hr>')
-    .replace(/^[-•] (.+)$/gm,'<li>$1</li>').replace(/^(\d+)\. (.+)$/gm,'<li>$2</li>');
-  html = html.replace(/((?:<li>.*<\/li>\n?)+)/g,'<ul>$1</ul>').replace(/<ul>\s*<\/ul>/g,'');
-  return html.split('\n').filter(l=>l.trim()).map(l => {
-    l = l.trim();
-    return (l.startsWith('<h')||l.startsWith('<ul')||l.startsWith('<li')||l.startsWith('<hr')) ? l : `<p>${l}</p>`;
-  }).join('\n');
+    .replace(/^[-•] (.+)$/gm,'<li>$1</li>').replace(/^(d+). (.+)$/gm,'<li>$2</li>');
+  h=h.replace(/((?:<li>.*</li>
+?)+)/g,'<ul>$1</ul>').replace(/<ul>s*</ul>/g,'');
+  return h.split('
+').filter(l=>l.trim()).map(l=>{
+    l=l.trim();
+    return(l.startsWith('<h')||l.startsWith('<ul')||l.startsWith('<li')||l.startsWith('<hr'))?l:'<p>'+l+'</p>';
+  }).join('
+');
 }
-
-// ═══════════════════════════════════════════════════
-// ERROR DIAGNOSIS
-// ═══════════════════════════════════════════════════
-function diagnosisError(e) {
-  const msg = (e?.message || '').toLowerCase();
-  if (msg.includes('api_key_invalid') || msg.includes('api key not valid') || msg.includes('invalid api key') || msg.includes('400'))
-    return 'Chave de API inválida. Verifique em aistudio.google.com/apikey e clique em Nova Sessão.';
-  if (msg.includes('quota') || msg.includes('rate limit') || msg.includes('resource_exhausted') || msg.includes('429'))
-    return 'Limite de requisições atingido. Aguarde 1 minuto e tente novamente.';
-  if (msg.includes('403') || msg.includes('permission'))
-    return 'Permissão negada. Verifique se a chave está ativa no Google AI Studio.';
-  return (e?.message || 'Erro desconhecido') + ' — Tente clicar em Nova Sessão.';
-}
-
-// ═══════════════════════════════════════════════════
-// EXPORT
-// ═══════════════════════════════════════════════════
-function openExport() {
-  const lines = ['═══════════════════════════════════','   O SUPERVISOR — REGISTRO DE SESSÃO',
-    `   Data: ${new Date().toLocaleDateString('pt-BR')}`,`   Terapeuta: ${THERAPIST_NAME}`];
+function openExport(){
+  const lines=['═══════════════════════════════════','   O SUPERVISOR — PSICOLOGIA INSIGHT','   Data: '+new Date().toLocaleDateString('pt-BR'),'   Terapeuta: '+THERAPIST_NAME];
   const p=document.getElementById('cf-patient').value.trim();
   const a=document.getElementById('cf-approach').value.trim();
   const c=document.getElementById('cf-complaint').value.trim();
-  if(p) lines.push(`   Paciente: ${p}`); if(a) lines.push(`   Abordagem: ${a}`); if(c) lines.push(`   Queixa: ${c}`);
-  lines.push('═══════════════════════════════════\n');
-  for (const m of messages) {
-    lines.push(`[${m.role==='user'?THERAPIST_NAME.toUpperCase():'O SUPERVISOR'}]`);
-    lines.push(m.content); lines.push('');
-  }
-  document.getElementById('export-content').value = lines.join('\n');
+  if(p)lines.push('   Paciente: '+p);if(a)lines.push('   Abordagem: '+a);if(c)lines.push('   Queixa: '+c);
+  lines.push('═══════════════════════════════════
+');
+  for(const m of messages){lines.push('['+( m.role==='user'?THERAPIST_NAME.toUpperCase():'O SUPERVISOR')+']');lines.push(m.content);lines.push('');}
+  document.getElementById('export-content').value=lines.join('
+');
   document.getElementById('export-modal').classList.add('open');
 }
-function closeExport() { document.getElementById('export-modal').classList.remove('open'); }
-function copyExport() {
-  const el=document.getElementById('export-content'); el.select(); document.execCommand('copy');
-  showToast('✅ Copiado!'); closeExport();
+function closeExport(){document.getElementById('export-modal').classList.remove('open')}
+function copyExport(){const el=document.getElementById('export-content');el.select();document.execCommand('copy');showToast('✅ Copiado!');closeExport()}
+function clearSession(){
+  if(!confirm('Iniciar nova sessão? O histórico será apagado.'))return;
+  messages=[];currentPhase=1;
+  document.getElementById('messages').innerHTML='';
+  document.getElementById('phase-badge').classList.remove('phase2');
+  document.getElementById('phase-label').textContent='Fase 1 — Mapeamento';
+  ['cf-patient','cf-approach','cf-complaint'].forEach(id=>document.getElementById(id).value='');
+  document.querySelectorAll('.chk-list li').forEach(li=>{li.classList.remove('done');li.querySelector('.chk-icon').textContent='';});
+  sendWelcome();
 }
-
-// ═══════════════════════════════════════════════════
-// UI UTILS
-// ═══════════════════════════════════════════════════
-function handleKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();} }
-function autoResize(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,160)+'px'; }
-function toggleCheck(el) { el.classList.toggle('done'); el.querySelector('.check-icon').textContent=el.classList.contains('done')?'✓':''; }
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,150)+'px'}
+function toggleCheck(el){el.classList.toggle('done');el.querySelector('.chk-icon').textContent=el.classList.contains('done')?'✓':''}
 let toastTimer;
-function showToast(msg) {
-  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
-  clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
-}
-
-document.getElementById('api-key-input').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('therapist-name-input').focus(); });
-document.getElementById('therapist-name-input').addEventListener('keydown', e=>{ if(e.key==='Enter') startSession(); });
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3000)}
+document.getElementById('inp-user').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('inp-pass').focus()});
+document.getElementById('inp-pass').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('inp-name').focus()});
+document.getElementById('inp-name').addEventListener('keydown',e=>{if(e.key==='Enter')startSession()});
 </script>
 </body>
 </html>
