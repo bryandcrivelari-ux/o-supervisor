@@ -456,8 +456,40 @@ async function sendWelcome() {
     messages.push({ role: 'assistant', content: r });
   } catch(e) {
     removeTypingIndicator();
-    appendMessage('ai', `⚠️ **Erro ao conectar:** ${diagnosisError(e)}`);
+    const msg = (e?.message || '').toLowerCase();
+    const isRateLimit = msg.includes('quota') || msg.includes('rate') || msg.includes('resource_exhausted') || msg.includes('429');
+    if (isRateLimit) {
+      startRetryCountdown();
+    } else {
+      appendMessage('ai', `⚠️ **Erro ao conectar:** ${diagnosisError(e)}`);
+    }
   }
+}
+
+function startRetryCountdown() {
+  let secs = 60;
+  const el = document.getElementById('messages');
+  const row = document.createElement('div');
+  row.className = 'msg-row ai'; row.id = 'retry-row';
+  const av = document.createElement('div'); av.className = 'avatar ai'; av.textContent = '🧠';
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.id = 'retry-bubble';
+  bubble.innerHTML = `<p>⏳ Limite de requisições atingido. Tentando novamente em <strong id="retry-count">60</strong>s...</p>`;
+  row.appendChild(av); row.appendChild(bubble);
+  el.appendChild(row); el.scrollTop = el.scrollHeight;
+
+  const timer = setInterval(() => {
+    secs--;
+    const countEl = document.getElementById('retry-count');
+    if (countEl) countEl.textContent = secs;
+    if (secs <= 0) {
+      clearInterval(timer);
+      const retryRow = document.getElementById('retry-row');
+      if (retryRow) retryRow.remove();
+      sendWelcome();
+    }
+  }, 1000);
 }
 
 async function sendMessage() {
@@ -485,7 +517,13 @@ async function sendMessage() {
     }
   } catch(e) {
     removeTypingIndicator();
-    appendMessage('ai', `⚠️ **Erro:** ${diagnosisError(e)}`);
+    const msg = (e?.message || '').toLowerCase();
+    const isRateLimit = msg.includes('quota') || msg.includes('rate') || msg.includes('resource_exhausted') || msg.includes('429');
+    if (isRateLimit) {
+      appendMessage('ai', '⏳ Limite de requisições atingido. Aguarde 1 minuto e envie sua mensagem novamente.');
+    } else {
+      appendMessage('ai', `⚠️ **Erro:** ${diagnosisError(e)}`);
+    }
   }
   isStreaming = false;
   document.getElementById('send-btn').disabled = false;
