@@ -3,83 +3,73 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<meta name="description" content="O Supervisor — Supervisão Clínica com IA | Psicologia Insight"/>
+<meta name="description" content="O Supervisor â SupervisÃ£o ClÃ­nica com IA | Psicologia Insight"/>
 <meta name="theme-color" content="#080b0e"/>
-<title>O Supervisor — Psicologia Insight</title>
+<title>O Supervisor â Psicologia Insight</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:       #080b0e;
-  --surface:  #0e1318;
-  --surface2: #141b23;
-  --border:   #2a1a1a;
-  --border2:  #3d1f1f;
-  --accent:   #9b1c1c;
-  --accent-b: #dc2626;
-  --accent-s: #2d0a0a;
-  --accent-g: rgba(155,28,28,0.18);
-  --gold:     #c9a84c;
-  --gold-s:   #2e2308;
-  --text:     #e8dede;
-  --text-m:   #9c8585;
-  --text-sub: #4a3535;
-  --user-bg:  #1f0a0a;
-  --success:  #3fb950;
-  --radius:   12px;
-  --shadow:   0 8px 40px rgba(0,0,0,0.7);
-  --font:     'Inter',system-ui,-apple-system,sans-serif;
-  --mono:     'JetBrains Mono','Fira Code',monospace;
+  --bg:#080b0e;--surface:#0e1318;--surface2:#141b23;
+  --border:#2a1a1a;--border2:#3d1f1f;
+  --accent:#9b1c1c;--accent-b:#dc2626;--accent-s:#2d0a0a;
+  --accent-g:rgba(155,28,28,0.18);
+  --gold:#c9a84c;--gold-s:#2e2308;
+  --text:#e8dede;--text-m:#9c8585;--text-sub:#4a3535;
+  --user-bg:#1f0a0a;--success:#3fb950;
+  --radius:12px;--shadow:0 8px 40px rgba(0,0,0,0.7);
+  --font:'Inter',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono','Fira Code',monospace;
 }
 html,body{height:100%;overflow:hidden}
 body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex;flex-direction:column;height:100vh}
 .eye-logo svg{display:block}
-#setup-screen{position:fixed;inset:0;z-index:100;background:radial-gradient(ellipse at 50% 30%, #1a0505 0%, #080b0e 70%);display:flex;align-items:center;justify-content:center;padding:24px;}
-.setup-card{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:48px 44px;max-width:460px;width:100%;box-shadow:var(--shadow),0 0 60px rgba(155,28,28,0.12);text-align:center;}
-.setup-eye{width:80px;height:80px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 20px rgba(155,28,28,0.6));}
-.setup-brand{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text-m);margin-bottom:8px;}
-.setup-card h1{font-size:28px;font-weight:700;letter-spacing:-0.5px;margin-bottom:4px;color:var(--text);}
+#setup-screen{position:fixed;inset:0;z-index:100;background:radial-gradient(ellipse at 50% 30%,#1a0505 0%,#080b0e 70%);display:flex;align-items:center;justify-content:center;padding:24px}
+.setup-card{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:48px 44px;max-width:460px;width:100%;box-shadow:var(--shadow),0 0 60px rgba(155,28,28,0.12);text-align:center}
+.setup-eye{width:80px;height:80px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 20px rgba(155,28,28,0.6))}
+.setup-brand{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text-m);margin-bottom:8px}
+.setup-card h1{font-size:28px;font-weight:700;letter-spacing:-0.5px;margin-bottom:4px;color:var(--text)}
 .setup-card h1 span{color:var(--accent-b)}
 .setup-card>p{color:var(--text-m);font-size:13px;line-height:1.6;margin-bottom:32px}
-.setup-label{display:block;text-align:left;font-size:11px;font-weight:600;color:var(--text-m);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;}
-.setup-input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);padding:12px 16px;color:var(--text);font-size:14px;font-family:var(--font);outline:none;transition:border-color .2s;margin-bottom:14px;}
+.setup-label{display:block;text-align:left;font-size:11px;font-weight:600;color:var(--text-m);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px}
+.setup-input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);padding:12px 16px;color:var(--text);font-size:14px;font-family:var(--font);outline:none;transition:border-color .2s;margin-bottom:14px}
 .setup-input:focus{border-color:var(--accent-b)}
 .setup-input::placeholder{color:var(--text-sub)}
-.setup-btn{width:100%;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:14px;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s,transform .1s;margin-top:6px;font-family:var(--font);letter-spacing:.3px;}
+.setup-btn{width:100%;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:14px;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s,transform .1s;margin-top:6px;font-family:var(--font);letter-spacing:.3px}
 .setup-btn:hover{background:#b91c1c}
 .setup-btn:active{transform:scale(.99)}
-.setup-err{margin-top:14px;font-size:13px;color:#f87171;min-height:20px;transition:opacity .2s;}
-.setup-footer{margin-top:20px;font-size:11px;color:var(--text-sub);line-height:1.6;}
-.setup-divider{border:none;border-top:1px solid var(--border);margin:28px 0;}
-#topbar{flex:0 0 auto;height:58px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 18px;gap:12px;position:relative;z-index:10;}
-.topbar-eye{width:34px;height:34px;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 8px rgba(155,28,28,0.5));flex-shrink:0;}
+.setup-err{margin-top:14px;font-size:13px;color:#f87171;min-height:20px}
+.setup-footer{margin-top:20px;font-size:11px;color:var(--text-sub);line-height:1.6}
+.setup-divider{border:none;border-top:1px solid var(--border);margin:28px 0}
+#topbar{flex:0 0 auto;height:58px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 18px;gap:12px;position:relative;z-index:10}
+.topbar-eye{width:34px;height:34px;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 0 8px rgba(155,28,28,0.5));flex-shrink:0}
 .topbar-title{font-size:15px;font-weight:700;letter-spacing:-.3px}
 .topbar-title span{color:var(--accent-b)}
 .topbar-sub{font-size:11px;color:var(--text-m);margin-top:1px;letter-spacing:.3px;text-transform:uppercase}
 .topbar-spacer{flex:1}
-.phase-badge{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border2);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;transition:all .4s ease;color:var(--text-m);}
+.phase-badge{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border2);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;transition:all .4s ease;color:var(--text-m)}
 .phase-badge .dot{width:7px;height:7px;border-radius:50%;background:var(--accent-b);animation:pulse 2s infinite}
 .phase-badge.phase2{border-color:var(--gold);color:var(--gold)}
 .phase-badge.phase2 .dot{background:var(--gold)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.topbar-btn{background:transparent;border:1px solid var(--border2);border-radius:8px;color:var(--text-m);padding:6px 12px;font-size:12px;cursor:pointer;transition:all .2s;font-family:var(--font);}
+.topbar-btn{background:transparent;border:1px solid var(--border2);border-radius:8px;color:var(--text-m);padding:6px 12px;font-size:12px;cursor:pointer;transition:all .2s;font-family:var(--font)}
 .topbar-btn:hover{background:var(--surface2);color:var(--text);border-color:var(--accent)}
 #main{flex:1 1 0;display:flex;overflow:hidden}
-#sidebar{width:255px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+#sidebar{width:255px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
 .sb-section{padding:14px 16px;border-bottom:1px solid var(--border)}
-.sb-section h3{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-m);margin-bottom:10px;}
+.sb-section h3{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-m);margin-bottom:10px}
 .cf{margin-bottom:10px}
 .cf label{display:block;font-size:11px;color:var(--text-m);margin-bottom:3px}
-.cf input,.cf textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:7px 10px;color:var(--text);font-size:12px;font-family:var(--font);outline:none;resize:none;transition:border-color .2s;}
+.cf input,.cf textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:7px 10px;color:var(--text);font-size:12px;font-family:var(--font);outline:none;resize:none;transition:border-color .2s}
 .cf input:focus,.cf textarea:focus{border-color:var(--accent-b)}
 .cf input::placeholder,.cf textarea::placeholder{color:var(--text-sub)}
 .chk-list{list-style:none}
-.chk-list li{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-m);padding:4px 0;cursor:pointer;transition:color .2s;}
+.chk-list li{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-m);padding:4px 0;cursor:pointer;transition:color .2s}
 .chk-list li:hover{color:var(--text)}
-.chk-icon{width:15px;height:15px;border:1.5px solid var(--border2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;transition:all .2s;}
+.chk-icon{width:15px;height:15px;border:1.5px solid var(--border2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;transition:all .2s}
 .chk-list li.done .chk-icon{background:var(--success);border-color:var(--success);color:#000}
 .chk-list li.done{color:var(--text-sub);text-decoration:line-through}
 .sb-tips{padding:14px 16px;flex:1;overflow-y:auto}
-.tip{background:var(--accent-s);border:1px solid rgba(155,28,28,.2);border-radius:var(--radius);padding:11px;font-size:12px;color:var(--text-m);line-height:1.6;margin-bottom:9px;}
+.tip{background:var(--accent-s);border:1px solid rgba(155,28,28,.2);border-radius:var(--radius);padding:11px;font-size:12px;color:var(--text-m);line-height:1.6;margin-bottom:9px}
 .tip strong{color:var(--accent-b);display:block;margin-bottom:3px;font-size:10px;text-transform:uppercase;letter-spacing:.5px}
 #chat-area{flex:1 1 0;display:flex;flex-direction:column;overflow:hidden}
 #messages{flex:1 1 0;overflow-y:auto;padding:22px 20px;scroll-behavior:smooth}
@@ -91,7 +81,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
 .avatar{width:32px;height:32px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .avatar.ai{background:var(--accent-s);border:1px solid var(--border2);filter:drop-shadow(0 0 6px rgba(155,28,28,.3))}
 .avatar.user{background:var(--user-bg);border:1px solid var(--border2)}
-.bubble{max-width:74%;padding:13px 15px;border-radius:17px;font-size:14px;line-height:1.72;}
+.bubble{max-width:74%;padding:13px 15px;border-radius:17px;font-size:14px;line-height:1.72}
 .msg-row.ai .bubble{background:var(--surface);border:1px solid var(--border);border-top-left-radius:4px;color:var(--text)}
 .msg-row.user .bubble{background:var(--user-bg);border:1px solid var(--border2);border-top-right-radius:4px;color:var(--text)}
 .bubble h2,.bubble h3{font-size:12px;font-weight:700;color:var(--accent-b);margin:13px 0 5px;text-transform:uppercase;letter-spacing:.5px}
@@ -112,11 +102,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
 .typing-dot:nth-child(3){animation-delay:.4s}
 @keyframes blink{0%,60%,100%{opacity:.2;transform:scale(.8)}30%{opacity:1;transform:scale(1)}}
 #input-area{flex:0 0 auto;background:var(--surface);border-top:1px solid var(--border);padding:14px 18px}
-.input-wrap{display:flex;gap:9px;align-items:flex-end;background:var(--surface2);border:1px solid var(--border2);border-radius:13px;padding:9px 9px 9px 15px;transition:border-color .2s;}
+.input-wrap{display:flex;gap:9px;align-items:flex-end;background:var(--surface2);border:1px solid var(--border2);border-radius:13px;padding:9px 9px 9px 15px;transition:border-color .2s}
 .input-wrap:focus-within{border-color:var(--accent-b)}
 #user-input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px;font-family:var(--font);line-height:1.6;resize:none;max-height:150px;overflow-y:auto}
 #user-input::placeholder{color:var(--text-sub)}
-#send-btn{width:36px;height:36px;background:var(--accent);border:none;border-radius:9px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s,transform .1s;font-size:15px;}
+#send-btn{width:36px;height:36px;background:var(--accent);border:none;border-radius:9px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s,transform .1s;font-size:15px}
 #send-btn:hover{background:#b91c1c}
 #send-btn:active{transform:scale(.94)}
 #send-btn:disabled{opacity:.4;cursor:not-allowed}
@@ -146,9 +136,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
 <svg viewBox="0 0 100 65" xmlns="http://www.w3.org/2000/svg" width="72" height="47">
   <defs>
     <radialGradient id="gIris" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#dc2626"/>
-      <stop offset="60%" stop-color="#7f1d1d"/>
-      <stop offset="100%" stop-color="#450a0a"/>
+      <stop offset="0%" stop-color="#dc2626"/><stop offset="60%" stop-color="#7f1d1d"/><stop offset="100%" stop-color="#450a0a"/>
     </radialGradient>
     <filter id="glow"><feGaussianBlur stdDeviation="1.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
   </defs>
@@ -168,8 +156,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
 <svg viewBox="0 0 100 65" xmlns="http://www.w3.org/2000/svg" width="28" height="18">
   <defs>
     <radialGradient id="gIris2" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#dc2626"/>
-      <stop offset="100%" stop-color="#450a0a"/>
+      <stop offset="0%" stop-color="#dc2626"/><stop offset="100%" stop-color="#450a0a"/>
     </radialGradient>
   </defs>
   <path d="M8,32 C22,8 78,8 92,32 C78,56 22,56 8,32 Z" fill="none" stroke="#9b1c1c" stroke-width="2.5"/>
@@ -183,243 +170,219 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
     <div class="setup-eye eye-logo" id="setup-eye-slot"></div>
     <div class="setup-brand">Psicologia Insight</div>
     <h1><span>O</span> Supervisor</h1>
-    <p>Supervisão clínica com Inteligência Artificial.<br/>Entre com suas credenciais para começar.</p>
+    <p>SupervisÃ£o clÃ­nica com InteligÃªncia Artificial.<br/>Entre com suas credenciais para comeÃ§ar.</p>
     <hr class="setup-divider"/>
-    <label class="setup-label" for="inp-user">Usuário</label>
+    <label class="setup-label" for="inp-user">UsuÃ¡rio</label>
     <input type="text" id="inp-user" class="setup-input" placeholder="supervisor" autocomplete="username"/>
     <label class="setup-label" for="inp-pass">Senha</label>
-    <input type="password" id="inp-pass" class="setup-input" placeholder="••••••••" autocomplete="current-password"/>
+    <input type="password" id="inp-pass" class="setup-input" placeholder="â¢â¢â¢â¢â¢â¢â¢â¢" autocomplete="current-password"/>
     <label class="setup-label" for="inp-name">Seu nome (opcional)</label>
     <input type="text" id="inp-name" class="setup-input" placeholder="Ex: Dra. Ana"/>
-    <button class="setup-btn" onclick="startSession()">Entrar →</button>
+    <button class="setup-btn" onclick="startSession()">Entrar</button>
     <div class="setup-err" id="setup-err"></div>
-    <p class="setup-footer">Psicologia Insight · Supervisão Clínica com IA</p>
+    <p class="setup-footer">Psicologia Insight Â· SupervisÃ£o ClÃ­nica com IA</p>
   </div>
 </div>
 <div id="topbar" class="hidden">
   <div class="topbar-eye eye-logo" id="topbar-eye-slot"></div>
-  <div>
-    <div class="topbar-title"><span>O</span> Supervisor</div>
-    <div class="topbar-sub">Psicologia Insight</div>
-  </div>
+  <div><div class="topbar-title"><span>O</span> Supervisor</div><div class="topbar-sub">Psicologia Insight</div></div>
   <div class="topbar-spacer"></div>
-  <div class="phase-badge" id="phase-badge">
-    <div class="dot"></div>
-    <span id="phase-label">Fase 1 — Mapeamento</span>
-  </div>
-  <button class="topbar-btn" onclick="openExport()">⬇ Exportar</button>
-  <button class="topbar-btn" onclick="clearSession()">↺ Nova Sessão</button>
+  <div class="phase-badge" id="phase-badge"><div class="dot"></div><span id="phase-label">Fase 1 â Mapeamento</span></div>
+  <button class="topbar-btn" onclick="openExport()">Exportar</button>
+  <button class="topbar-btn" onclick="clearSession()">Nova SessÃ£o</button>
 </div>
 <div id="main" class="hidden">
   <div id="sidebar">
     <div class="sb-section">
       <h3>Dados do Caso</h3>
-      <div class="cf"><label>Paciente (sigla/código)</label><input type="text" id="cf-patient" placeholder="Ex: Paciente A"/></div>
-      <div class="cf"><label>Abordagem clínica</label><input type="text" id="cf-approach" placeholder="Ex: TCC, Psicanálise..."/></div>
+      <div class="cf"><label>Paciente (sigla)</label><input type="text" id="cf-patient" placeholder="Ex: Paciente A"/></div>
+      <div class="cf"><label>Abordagem</label><input type="text" id="cf-approach" placeholder="Ex: TCC"/></div>
       <div class="cf"><label>Queixa principal</label><textarea id="cf-complaint" rows="2" placeholder="Queixa em poucas palavras..."></textarea></div>
     </div>
     <div class="sb-section">
-      <h3>Checklist do Caso</h3>
+      <h3>Checklist</h3>
       <ul class="chk-list">
         <li onclick="toggleCheck(this)"><div class="chk-icon"></div> Queixa principal mapeada</li>
         <li onclick="toggleCheck(this)"><div class="chk-icon"></div> Fatores mantenedores</li>
-        <li onclick="toggleCheck(this)"><div class="chk-icon"></div> Histórico relevante</li>
-        <li onclick="toggleCheck(this)"><div class="chk-icon"></div> Aliança terapêutica avaliada</li>
-        <li onclick="toggleCheck(this)"><div class="chk-icon"></div> Hipótese diagnóstica</li>
-        <li onclick="toggleCheck(this)"><div class="chk-icon"></div> Plano de intervenção</li>
+        <li onclick="toggleCheck(this)"><div class="chk-icon"></div> HistÃ³rico relevante</li>
+        <li onclick="toggleCheck(this)"><div class="chk-icon"></div> AlianÃ§a terapÃªutica</li>
+        <li onclick="toggleCheck(this)"><div class="chk-icon"></div> HipÃ³tese diagnÃ³stica</li>
+        <li onclick="toggleCheck(this)"><div class="chk-icon"></div> Plano de intervenÃ§Ã£o</li>
         <li onclick="toggleCheck(this)"><div class="chk-icon"></div> Pontos cegos discutidos</li>
       </ul>
     </div>
     <div class="sb-tips">
-      <div class="tip"><strong>💡 Dica</strong>Apresente o caso com riqueza de detalhes. Quanto mais contexto, mais precisa a conceitualização.</div>
-      <div class="tip"><strong>🔒 Privacidade</strong>Não inclua nome real, CPF ou dados identificáveis do paciente.</div>
+      <div class="tip"><strong>Dica</strong>Quanto mais contexto vocÃª fornecer, mais precisa serÃ¡ a conceitualizaÃ§Ã£o.</div>
+      <div class="tip"><strong>Privacidade</strong>NÃ£o inclua nome real ou dados identificÃ¡veis do paciente.</div>
     </div>
   </div>
   <div id="chat-area">
     <div id="messages"></div>
     <div id="input-area">
       <div class="input-wrap">
-        <textarea id="user-input" rows="1" placeholder="Descreva o caso ou sua dúvida clínica..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-        <button id="send-btn" onclick="sendMessage()">↑</button>
+        <textarea id="user-input" rows="1" placeholder="Descreva o caso ou sua dÃºvida clÃ­nica..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        <button id="send-btn" onclick="sendMessage()">&#8593;</button>
       </div>
-      <div class="input-footer">
-        <span class="input-hint"><kbd>Enter</kbd> envia · <kbd>Shift+Enter</kbd> nova linha</span>
-      </div>
+      <div class="input-footer"><span class="input-hint"><kbd>Enter</kbd> envia Â· <kbd>Shift+Enter</kbd> nova linha</span></div>
     </div>
   </div>
 </div>
 <div id="export-modal">
   <div class="modal-card">
-    <h3>📋 Exportar Supervisão</h3>
+    <h3>Exportar SupervisÃ£o</h3>
     <textarea id="export-content" readonly></textarea>
     <div class="modal-actions">
       <button class="m-btn secondary" onclick="closeExport()">Fechar</button>
-      <button class="m-btn primary" onclick="copyExport()">Copiar texto</button>
+      <button class="m-btn primary" onclick="copyExport()">Copiar</button>
     </div>
   </div>
 </div>
 <div id="toast"></div>
 <script>
-function injectEye(slotId, tplId) {
-  const slot = document.getElementById(slotId);
-  const tpl  = document.getElementById(tplId);
-  if (slot && tpl) slot.appendChild(tpl.content.cloneNode(true));
-}
-injectEye('setup-eye-slot',  'tpl-eye-lg');
-injectEye('topbar-eye-slot', 'tpl-eye-sm');
-let AUTH = { username: '', password: '' };
-let THERAPIST_NAME = 'você';
-let messages = [];
-let isStreaming = false;
-let currentPhase = 1;
-function startSession() {
-  const u = document.getElementById('inp-user').value.trim();
-  const p = document.getElementById('inp-pass').value.trim();
-  const n = document.getElementById('inp-name').value.trim();
-  const err = document.getElementById('setup-err');
-  if (!u || !p) { err.textContent = 'Preencha usuário e senha.'; return; }
-  err.textContent = '';
-  AUTH = { username: u, password: p };
-  THERAPIST_NAME = n || 'você';
+function injectEye(a,b){var s=document.getElementById(a),t=document.getElementById(b);if(s&&t)s.appendChild(t.content.cloneNode(true))}
+injectEye('setup-eye-slot','tpl-eye-lg');
+injectEye('topbar-eye-slot','tpl-eye-sm');
+var AUTH={username:'',password:''};
+var THERAPIST_NAME='voce';
+var messages=[];
+var isStreaming=false;
+var currentPhase=1;
+function startSession(){
+  var u=document.getElementById('inp-user').value.trim();
+  var p=document.getElementById('inp-pass').value.trim();
+  var n=document.getElementById('inp-name').value.trim();
+  var err=document.getElementById('setup-err');
+  if(!u||!p){err.textContent='Preencha usuario e senha.';return}
+  err.textContent='';
+  AUTH={username:u,password:p};
+  THERAPIST_NAME=n||'voce';
   document.getElementById('setup-screen').classList.add('hidden');
   document.getElementById('topbar').classList.remove('hidden');
   document.getElementById('main').classList.remove('hidden');
   sendWelcome();
 }
-function sendWelcome() {
-  const nome = THERAPIST_NAME !== 'você' ? ', ' + THERAPIST_NAME : '';
-  const txt = 'Olá' + nome + '! Sou **O Supervisor** — seu parceiro de supervisão clínica com IA, da Psicologia Insight.\n\nEstou aqui para te ajudar a organizar o raciocínio clínico, mapear o caso e evidenciar pontos cegos. Trabalhamos em duas fases: primeiro faço um **mapeamento socrático** junto com você, e quando o caso estiver maduro, entrego uma **síntese completa** com conceitualização, pontos cegos e plano de intervenção.\n\nQuando estiver pronto, me conte o caso ou a dúvida clínica que quer trabalhar hoje.';
-  appendMessage('ai', txt);
-  messages.push({ role: 'assistant', content: txt });
+function sendWelcome(){
+  var nome=THERAPIST_NAME!=='voce'?', '+THERAPIST_NAME:'';
+  var txt='Ola'+nome+'! Sou O Supervisor, seu parceiro de supervisao clinica com IA da Psicologia Insight.\n\nEstou aqui para te ajudar a organizar o raciocinio clinico, mapear o caso e evidenciar pontos cegos. Trabalhamos em duas fases: primeiro um mapeamento socratico, e quando o caso estiver maduro, entrego uma sintese completa com conceitualizacao, pontos cegos e plano de intervencao.\n\nMe conte o caso ou a duvida clinica que quer trabalhar hoje.';
+  appendMessage('ai',txt);
+  messages.push({role:'assistant',content:txt});
 }
-async function sendMessage() {
-  if (isStreaming) return;
-  const input = document.getElementById('user-input');
-  const text = input.value.trim();
-  if (!text) return;
-  appendMessage('user', text);
-  messages.push({ role: 'user', content: text });
-  input.value = ''; autoResize(input);
+async function sendMessage(){
+  if(isStreaming)return;
+  var input=document.getElementById('user-input');
+  var text=input.value.trim();
+  if(!text)return;
+  appendMessage('user',text);
+  messages.push({role:'user',content:text});
+  input.value='';autoResize(input);
   appendTypingIndicator();
-  isStreaming = true;
-  document.getElementById('send-btn').disabled = true;
-  try {
-    const reply = await callAPI(messages.slice(-20));
+  isStreaming=true;
+  document.getElementById('send-btn').disabled=true;
+  try{
+    var reply=await callAPI(messages.slice(-20));
     removeTypingIndicator();
-    if (reply.includes('[FASE2_ATIVADA]') && currentPhase === 1) {
+    if(reply.indexOf('[FASE2_ATIVADA]')>=0&&currentPhase===1){
       activatePhase2();
-      const clean = reply.replace('[FASE2_ATIVADA]', '').trim();
-      appendMessage('ai', clean, true);
-      messages.push({ role: 'assistant', content: clean });
-    } else {
-      appendMessage('ai', reply, currentPhase === 2);
-      messages.push({ role: 'assistant', content: reply });
+      var clean=reply.replace('[FASE2_ATIVADA]','').trim();
+      appendMessage('ai',clean,true);
+      messages.push({role:'assistant',content:clean});
+    }else{
+      appendMessage('ai',reply,currentPhase===2);
+      messages.push({role:'assistant',content:reply});
     }
-  } catch(e) {
+  }catch(e){
     removeTypingIndicator();
-    if (e.message === '401') {
-      appendMessage('ai', '🔒 Sessão expirada. Recarregue a página e entre novamente.');
-    } else {
-      appendMessage('ai', '⚠️ ' + e.message);
-    }
+    appendMessage('ai','Erro: '+e.message);
   }
-  isStreaming = false;
-  document.getElementById('send-btn').disabled = false;
+  isStreaming=false;
+  document.getElementById('send-btn').disabled=false;
   input.focus();
 }
-async function callAPI(msgs, overrideUser) {
-  const body = { username: AUTH.username, password: AUTH.password, therapistName: THERAPIST_NAME, contents: msgs, overrideUser: overrideUser || null };
-  const res = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data?.error || 'Erro ' + res.status);
-  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) throw new Error('Resposta vazia da API.');
-  return text;
+async function callAPI(msgs){
+  var body={username:AUTH.username,password:AUTH.password,therapistName:THERAPIST_NAME,contents:msgs,overrideUser:null};
+  var res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  var data=await res.json();
+  if(!res.ok)throw new Error(data&&data.error?data.error:'Erro '+res.status);
+  var t=data&&data.candidates&&data.candidates[0]&&data.candidates[0].content&&data.candidates[0].content.parts&&data.candidates[0].content.parts[0]&&data.candidates[0].content.parts[0].text;
+  if(!t)throw new Error('Resposta vazia.');
+  return t;
 }
-function activatePhase2() {
-  currentPhase = 2;
+function activatePhase2(){
+  currentPhase=2;
   document.getElementById('phase-badge').classList.add('phase2');
-  document.getElementById('phase-label').textContent = 'Fase 2 — Síntese';
-  showToast('🎯 Fase 2 ativada — Síntese e Plano de Ação');
+  document.getElementById('phase-label').textContent='Fase 2 - Sintese';
+  showToast('Fase 2 ativada!');
 }
-function appendMessage(role, content, isSynthesis = false) {
-  const el = document.getElementById('messages');
-  const row = document.createElement('div'); row.className = 'msg-row ' + role;
-  const av  = document.createElement('div'); av.className = 'avatar ' + role;
-  if (role === 'ai') {
-    const tpl = document.getElementById('tpl-eye-sm');
-    av.appendChild(tpl.content.cloneNode(true));
-  } else {
-    av.textContent = THERAPIST_NAME.charAt(0).toUpperCase() || '👤';
-    av.style.fontSize = '13px'; av.style.fontWeight = '700'; av.style.color = '#e8dede';
-  }
-  const bubble = document.createElement('div');
-  bubble.className = 'bubble' + (isSynthesis ? ' synthesis' : '');
-  bubble.innerHTML = parseMarkdown(content);
-  row.appendChild(av); row.appendChild(bubble);
-  el.appendChild(row); el.scrollTop = el.scrollHeight;
+function appendMessage(role,content,isSynthesis){
+  var el=document.getElementById('messages');
+  var row=document.createElement('div');row.className='msg-row '+role;
+  var av=document.createElement('div');av.className='avatar '+role;
+  if(role==='ai'){var tpl=document.getElementById('tpl-eye-sm');av.appendChild(tpl.content.cloneNode(true));}
+  else{av.textContent=THERAPIST_NAME.charAt(0).toUpperCase();av.style.fontSize='13px';av.style.fontWeight='700';av.style.color='#e8dede';}
+  var bubble=document.createElement('div');
+  bubble.className='bubble'+(isSynthesis?' synthesis':'');
+  bubble.innerHTML=parseMarkdown(content);
+  row.appendChild(av);row.appendChild(bubble);
+  el.appendChild(row);el.scrollTop=el.scrollHeight;
 }
-function appendTypingIndicator() {
-  const el = document.getElementById('messages');
-  const row = document.createElement('div'); row.className='msg-row ai'; row.id='typing-row';
-  const av = document.createElement('div'); av.className='avatar ai';
-  const tpl = document.getElementById('tpl-eye-sm');
-  av.appendChild(tpl.content.cloneNode(true));
-  const ind = document.createElement('div'); ind.className='typing-indicator';
+function appendTypingIndicator(){
+  var el=document.getElementById('messages');
+  var row=document.createElement('div');row.className='msg-row ai';row.id='typing-row';
+  var av=document.createElement('div');av.className='avatar ai';
+  var tpl=document.getElementById('tpl-eye-sm');av.appendChild(tpl.content.cloneNode(true));
+  var ind=document.createElement('div');ind.className='typing-indicator';
   ind.innerHTML='<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
-  row.appendChild(av); row.appendChild(ind);
-  el.appendChild(row); el.scrollTop=el.scrollHeight;
+  row.appendChild(av);row.appendChild(ind);el.appendChild(row);el.scrollTop=el.scrollHeight;
 }
-function removeTypingIndicator(){const e=document.getElementById('typing-row');if(e)e.remove()}
+function removeTypingIndicator(){var e=document.getElementById('typing-row');if(e)e.remove()}
 function parseMarkdown(text){
-  let h=text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  var nl=String.fromCharCode(10);
+  var h=text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     .replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>')
-    .replace(/***(.+?)***/g,'<strong><em>$1</em></strong>')
-    .replace(/**(.+?)**/g,'<strong>$1</strong>').replace(/*(.+?)*/g,'<em>$1</em>')
-    .replace(/`(.+?)`/g,'<code>$1</code>').replace(/^---$/gm,'<hr>')
-    .replace(/^[-•] (.+)$/gm,'<li>$1</li>').replace(/^(d+). (.+)$/gm,'<li>$2</li>');
-  h=h.replace(/((?:<li>.*</li>
-?)+)/g,'<ul>$1</ul>').replace(/<ul>s*</ul>/g,'');
-  return h.split('
-').filter(l=>l.trim()).map(l=>{
+    .replace(/[*][*][*](.+?)[*][*][*]/g,'<strong><em>$1</em></strong>')
+    .replace(/[*][*](.+?)[*][*]/g,'<strong>$1</strong>')
+    .replace(/[*]([^*]+)[*]/g,'<em>$1</em>')
+    .replace(/^---$/gm,'<hr>')
+    .replace(/^[-] (.+)$/gm,'<li>$1</li>')
+    .replace(/^([0-9]+)[.] (.+)$/gm,'<li>$2</li>');
+  h=h.replace(/((?:<li>[^<]*<[/]li>[^<]*)+)/g,'<ul>$1</ul>');
+  return h.split(nl).filter(function(l){return l.trim();}).map(function(l){
     l=l.trim();
-    return(l.startsWith('<h')||l.startsWith('<ul')||l.startsWith('<li')||l.startsWith('<hr'))?l:'<p>'+l+'</p>';
-  }).join('
-');
+    return(l.startsWith('<h')||l.startsWith('<ul')||l.startsWith('<li')||l.startsWith('<hr'))?l:('<p>'+l+'</p>');
+  }).join(nl);
 }
 function openExport(){
-  const lines=['═══════════════════════════════════','   O SUPERVISOR — PSICOLOGIA INSIGHT','   Data: '+new Date().toLocaleDateString('pt-BR'),'   Terapeuta: '+THERAPIST_NAME];
-  const p=document.getElementById('cf-patient').value.trim();
-  const a=document.getElementById('cf-approach').value.trim();
-  const c=document.getElementById('cf-complaint').value.trim();
-  if(p)lines.push('   Paciente: '+p);if(a)lines.push('   Abordagem: '+a);if(c)lines.push('   Queixa: '+c);
-  lines.push('═══════════════════════════════════
-');
-  for(const m of messages){lines.push('['+( m.role==='user'?THERAPIST_NAME.toUpperCase():'O SUPERVISOR')+']');lines.push(m.content);lines.push('');}
-  document.getElementById('export-content').value=lines.join('
-');
+  var nl=String.fromCharCode(10);
+  var lines=['=== O SUPERVISOR - PSICOLOGIA INSIGHT ===','Data: '+new Date().toLocaleDateString('pt-BR'),'Terapeuta: '+THERAPIST_NAME,''];
+  var p=document.getElementById('cf-patient').value.trim();
+  var a=document.getElementById('cf-approach').value.trim();
+  var c=document.getElementById('cf-complaint').value.trim();
+  if(p)lines.push('Paciente: '+p);if(a)lines.push('Abordagem: '+a);if(c)lines.push('Queixa: '+c);
+  lines.push('==========================================','');
+  for(var i=0;i<messages.length;i++){var m=messages[i];lines.push('['+( m.role==='user'?THERAPIST_NAME.toUpperCase():'O SUPERVISOR')+']');lines.push(m.content);lines.push('');}
+  document.getElementById('export-content').value=lines.join(nl);
   document.getElementById('export-modal').classList.add('open');
 }
 function closeExport(){document.getElementById('export-modal').classList.remove('open')}
-function copyExport(){const el=document.getElementById('export-content');el.select();document.execCommand('copy');showToast('✅ Copiado!');closeExport()}
+function copyExport(){var el=document.getElementById('export-content');el.select();document.execCommand('copy');showToast('Copiado!');closeExport()}
 function clearSession(){
-  if(!confirm('Iniciar nova sessão? O histórico será apagado.'))return;
+  if(!confirm('Iniciar nova sessao?'))return;
   messages=[];currentPhase=1;
   document.getElementById('messages').innerHTML='';
   document.getElementById('phase-badge').classList.remove('phase2');
-  document.getElementById('phase-label').textContent='Fase 1 — Mapeamento';
-  ['cf-patient','cf-approach','cf-complaint'].forEach(id=>document.getElementById(id).value='');
-  document.querySelectorAll('.chk-list li').forEach(li=>{li.classList.remove('done');li.querySelector('.chk-icon').textContent='';});
+  document.getElementById('phase-label').textContent='Fase 1 - Mapeamento';
+  ['cf-patient','cf-approach','cf-complaint'].forEach(function(id){document.getElementById(id).value='';});
+  document.querySelectorAll('.chk-list li').forEach(function(li){li.classList.remove('done');li.querySelector('.chk-icon').textContent='';});
   sendWelcome();
 }
 function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}}
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,150)+'px'}
-function toggleCheck(el){el.classList.toggle('done');el.querySelector('.chk-icon').textContent=el.classList.contains('done')?'✓':''}
-let toastTimer;
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3000)}
-document.getElementById('inp-user').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('inp-pass').focus()});
-document.getElementById('inp-pass').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('inp-name').focus()});
-document.getElementById('inp-name').addEventListener('keydown',e=>{if(e.key==='Enter')startSession()});
+function toggleCheck(el){el.classList.toggle('done');el.querySelector('.chk-icon').textContent=el.classList.contains('done')?'v':''}
+var toastTimer;
+function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove('show')},3000)}
+document.getElementById('inp-user').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('inp-pass').focus()});
+document.getElementById('inp-pass').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('inp-name').focus()});
+document.getElementById('inp-name').addEventListener('keydown',function(e){if(e.key==='Enter')startSession()});
 </script>
 </body>
 </html>
