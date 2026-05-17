@@ -7,13 +7,6 @@
 <meta name="theme-color" content="#0d1117" />
 <title>O Supervisor — Supervisão Clínica com IA</title>
 
-<script type="importmap">
-{
-  "imports": {
-    "@google/generative-ai": "https://esm.sh/@google/generative-ai@0.21.0"
-  }
-}
-</script>
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -336,18 +329,19 @@
 
 <div id="toast"></div>
 
-<script type="module">
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
+<script>
+// ═══════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════
 let API_KEY = '';
 let THERAPIST_NAME = 'você';
 let messages = [];
 let isStreaming = false;
 let currentPhase = 1;
-let genAI = null;
-let model = null;
 
-// ── System Prompt ────────────────────────────────────
+// ═══════════════════════════════════════════════════
+// SYSTEM PROMPT
+// ═══════════════════════════════════════════════════
 function buildSystemPrompt(name) {
   return `Você é "O Supervisor", um sistema avançado de inteligência artificial especializado em supervisão clínica para psicólogos. Sua arquitetura combina a precisão analítica e clareza estrutural do Jarvis (Homem de Ferro) com a sensibilidade e profundidade de um supervisor humano experiente.
 Seu objetivo é auxiliar o psicólogo a organizar o raciocínio clínico, trazer clareza às ideias, mapear o caso e evidenciar pontos cegos.
@@ -368,7 +362,7 @@ Você possui domínio profundo em todas as áreas da psicologia (Psicanálise, A
 - Proibido: diagnósticos fechados, conclusões precipitadas ou sugestões de técnicas.
 - Valide o terapeuta, faça perguntas socráticas estratégicas — máximo 1 ou 2 por vez.
 - Foque em fatores de manutenção, gatilhos, crenças latentes e aliança terapêutica.
-- Quando tiver dados suficientes, inclua EXATAMENTE este marcador no início: [FASE2_ATIVADA]
+- Quando tiver dados suficientes, inclua EXATAMENTE este marcador no início da mensagem: [FASE2_ATIVADA]
 
 ## FASE 2: SÍNTESE, DIRETIVIDADE E PLANO DE AÇÃO
 Entregue obrigatoriamente:
@@ -383,7 +377,61 @@ Entregue obrigatoriamente:
 - Use markdown nas respostas (negrito, listas, ## seções).`;
 }
 
-// ── Start Session ────────────────────────────────────
+// ═══════════════════════════════════════════════════
+// GEMINI REST API — fetch direto, sem SDK
+// ═══════════════════════════════════════════════════
+async function callGemini(msgs, overrideUser) {
+  const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+  const system = buildSystemPrompt(THERAPIST_NAME);
+
+  let contents;
+  if (overrideUser) {
+    contents = [{ role: 'user', parts: [{ text: overrideUser }] }];
+  } else {
+    // Constrói histórico alternado user/model
+    const raw = msgs.map(m => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.content }]
+    }));
+    // Merge de turnos consecutivos iguais
+    contents = [];
+    for (const t of raw) {
+      if (contents.length === 0 || contents[contents.length - 1].role !== t.role) {
+        contents.push({ role: t.role, parts: [{ text: t.parts[0].text }] });
+      } else {
+        contents[contents.length - 1].parts[0].text += '\n\n' + t.parts[0].text;
+      }
+    }
+    // Garante que começa com user
+    while (contents.length > 0 && contents[0].role !== 'user') contents.shift();
+  }
+
+  const body = {
+    system_instruction: { parts: [{ text: system }] },
+    contents,
+    generationConfig: { maxOutputTokens: 2048, temperature: 0.7 }
+  };
+
+  const res = await fetch(ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err?.error?.message || `HTTP ${res.status}`);
+  }
+
+  const data = await res.json();
+  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) throw new Error('Resposta vazia da API.');
+  return text;
+}
+
+// ═══════════════════════════════════════════════════
+// SESSION
+// ═══════════════════════════════════════════════════
 function startSession() {
   const key = document.getElementById('api-key-input').value.trim();
   const name = document.getElementById('therapist-name-input').value.trim();
@@ -393,35 +441,25 @@ function startSession() {
   }
   API_KEY = key;
   THERAPIST_NAME = name || 'você';
-  genAI = new GoogleGenerativeAI(API_KEY);
-  model = genAI.getGenerativeModel({
-    model: 'gemini-1.5-flash',
-    systemInstruction: buildSystemPrompt(THERAPIST_NAME),
-    generationConfig: { maxOutputTokens: 2048, temperature: 0.7 }
-  });
   document.getElementById('setup-screen').classList.add('hidden');
   document.getElementById('topbar').classList.remove('hidden');
   document.getElementById('main').classList.remove('hidden');
   sendWelcome();
 }
 
-// ── Welcome ──────────────────────────────────────────
 async function sendWelcome() {
   appendTypingIndicator();
   try {
-    const response = await callGemini([],
-      `Apresente-se como O Supervisor de forma acolhedora, máximo 5 linhas. Convide ${THERAPIST_NAME} a compartilhar o caso ou dúvida clínica. Não faça perguntas ainda. Seja direto, caloroso e confiante.`
-    );
+    const r = await callGemini([], `Apresente-se como O Supervisor de forma acolhedora, máximo 5 linhas. Convide ${THERAPIST_NAME} a compartilhar o caso ou dúvida clínica. Não faça perguntas ainda. Seja direto, caloroso e confiante.`);
     removeTypingIndicator();
-    appendMessage('ai', response);
-    messages.push({ role: 'assistant', content: response });
+    appendMessage('ai', r);
+    messages.push({ role: 'assistant', content: r });
   } catch(e) {
     removeTypingIndicator();
     appendMessage('ai', `⚠️ **Erro ao conectar:** ${diagnosisError(e)}`);
   }
 }
 
-// ── Send Message ─────────────────────────────────────
 async function sendMessage() {
   if (isStreaming) return;
   const input = document.getElementById('user-input');
@@ -429,8 +467,7 @@ async function sendMessage() {
   if (!text) return;
   appendMessage('user', text);
   messages.push({ role: 'user', content: text });
-  input.value = '';
-  autoResize(input);
+  input.value = ''; autoResize(input);
   appendTypingIndicator();
   isStreaming = true;
   document.getElementById('send-btn').disabled = true;
@@ -455,32 +492,20 @@ async function sendMessage() {
   input.focus();
 }
 
-// ── Gemini SDK Call ──────────────────────────────────
-async function callGemini(msgs, overrideUser) {
-  if (overrideUser) {
-    const result = await model.generateContent(overrideUser);
-    return result.response.text();
-  }
-  const history = [];
-  for (let i = 0; i < msgs.length - 1; i++) {
-    const m = msgs[i];
-    history.push({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] });
-  }
-  const clean = [];
-  for (const t of history) {
-    if (clean.length === 0 || clean[clean.length-1].role !== t.role) {
-      clean.push({ role: t.role, parts: [{ text: t.parts[0].text }] });
-    } else {
-      clean[clean.length-1].parts[0].text += '\n\n' + t.parts[0].text;
-    }
-  }
-  while (clean.length > 0 && clean[0].role !== 'user') clean.shift();
-  const chat = model.startChat({ history: clean });
-  const result = await chat.sendMessage(msgs[msgs.length-1].content);
-  return result.response.text();
+function clearSession() {
+  if (!confirm('Iniciar nova sessão? O histórico será apagado.')) return;
+  messages = []; currentPhase = 1;
+  document.getElementById('messages').innerHTML = '';
+  document.getElementById('phase-badge').classList.remove('phase2');
+  document.getElementById('phase-label').textContent = 'Fase 1 — Mapeamento';
+  ['cf-patient','cf-approach','cf-complaint'].forEach(id => document.getElementById(id).value = '');
+  document.querySelectorAll('.checklist li').forEach(li => { li.classList.remove('done'); li.querySelector('.check-icon').textContent = ''; });
+  sendWelcome();
 }
 
-// ── Phase 2 ──────────────────────────────────────────
+// ═══════════════════════════════════════════════════
+// PHASE 2
+// ═══════════════════════════════════════════════════
 function activatePhase2() {
   currentPhase = 2;
   document.getElementById('phase-badge').classList.add('phase2');
@@ -488,7 +513,9 @@ function activatePhase2() {
   showToast('🎯 Fase 2 ativada — Síntese e Plano de Ação');
 }
 
-// ── DOM Helpers ──────────────────────────────────────
+// ═══════════════════════════════════════════════════
+// DOM
+// ═══════════════════════════════════════════════════
 function appendMessage(role, content, isSynthesis = false) {
   const el = document.getElementById('messages');
   const row = document.createElement('div');
@@ -499,10 +526,8 @@ function appendMessage(role, content, isSynthesis = false) {
   const bubble = document.createElement('div');
   bubble.className = `bubble${isSynthesis ? ' synthesis' : ''}`;
   bubble.innerHTML = parseMarkdown(content);
-  row.appendChild(av);
-  row.appendChild(bubble);
-  el.appendChild(row);
-  el.scrollTop = el.scrollHeight;
+  row.appendChild(av); row.appendChild(bubble);
+  el.appendChild(row); el.scrollTop = el.scrollHeight;
 }
 function appendTypingIndicator() {
   const el = document.getElementById('messages');
@@ -516,7 +541,9 @@ function appendTypingIndicator() {
 }
 function removeTypingIndicator() { const e = document.getElementById('typing-row'); if(e) e.remove(); }
 
-// ── Markdown ──────────────────────────────────────────
+// ═══════════════════════════════════════════════════
+// MARKDOWN
+// ═══════════════════════════════════════════════════
 function parseMarkdown(text) {
   let html = text
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -532,31 +559,33 @@ function parseMarkdown(text) {
   }).join('\n');
 }
 
-// ── Error Diagnosis ───────────────────────────────────
+// ═══════════════════════════════════════════════════
+// ERROR DIAGNOSIS
+// ═══════════════════════════════════════════════════
 function diagnosisError(e) {
   const msg = (e?.message || '').toLowerCase();
-  if (msg.includes('api_key_invalid') || msg.includes('api key not valid') || msg.includes('invalid api key'))
-    return 'Chave de API inválida. Verifique em **aistudio.google.com/apikey** e clique em Nova Sessão.';
-  if (msg.includes('quota') || msg.includes('rate limit') || msg.includes('resource_exhausted'))
+  if (msg.includes('api_key_invalid') || msg.includes('api key not valid') || msg.includes('invalid api key') || msg.includes('400'))
+    return 'Chave de API inválida. Verifique em aistudio.google.com/apikey e clique em Nova Sessão.';
+  if (msg.includes('quota') || msg.includes('rate limit') || msg.includes('resource_exhausted') || msg.includes('429'))
     return 'Limite de requisições atingido. Aguarde 1 minuto e tente novamente.';
-  if (msg.includes('fetch') || msg.includes('networkerror') || msg.includes('failed to fetch') || msg.includes('load failed'))
-    return 'Erro de rede. Verifique sua conexão com a internet.';
-  if (msg.includes('permission') || msg.includes('403'))
+  if (msg.includes('403') || msg.includes('permission'))
     return 'Permissão negada. Verifique se a chave está ativa no Google AI Studio.';
   return (e?.message || 'Erro desconhecido') + ' — Tente clicar em Nova Sessão.';
 }
 
-// ── Export ────────────────────────────────────────────
+// ═══════════════════════════════════════════════════
+// EXPORT
+// ═══════════════════════════════════════════════════
 function openExport() {
-  const lines = ['═══════════════════════════════════', '   O SUPERVISOR — REGISTRO DE SESSÃO',
-    `   Data: ${new Date().toLocaleDateString('pt-BR')}`, `   Terapeuta: ${THERAPIST_NAME}`];
-  const p = document.getElementById('cf-patient').value.trim();
-  const a = document.getElementById('cf-approach').value.trim();
-  const c = document.getElementById('cf-complaint').value.trim();
+  const lines = ['═══════════════════════════════════','   O SUPERVISOR — REGISTRO DE SESSÃO',
+    `   Data: ${new Date().toLocaleDateString('pt-BR')}`,`   Terapeuta: ${THERAPIST_NAME}`];
+  const p=document.getElementById('cf-patient').value.trim();
+  const a=document.getElementById('cf-approach').value.trim();
+  const c=document.getElementById('cf-complaint').value.trim();
   if(p) lines.push(`   Paciente: ${p}`); if(a) lines.push(`   Abordagem: ${a}`); if(c) lines.push(`   Queixa: ${c}`);
   lines.push('═══════════════════════════════════\n');
   for (const m of messages) {
-    lines.push(`[${m.role === 'user' ? THERAPIST_NAME.toUpperCase() : 'O SUPERVISOR'}]`);
+    lines.push(`[${m.role==='user'?THERAPIST_NAME.toUpperCase():'O SUPERVISOR'}]`);
     lines.push(m.content); lines.push('');
   }
   document.getElementById('export-content').value = lines.join('\n');
@@ -564,45 +593,24 @@ function openExport() {
 }
 function closeExport() { document.getElementById('export-modal').classList.remove('open'); }
 function copyExport() {
-  const el = document.getElementById('export-content'); el.select(); document.execCommand('copy');
+  const el=document.getElementById('export-content'); el.select(); document.execCommand('copy');
   showToast('✅ Copiado!'); closeExport();
 }
 
-// ── Clear Session ─────────────────────────────────────
-function clearSession() {
-  if (!confirm('Iniciar nova sessão? O histórico será apagado.')) return;
-  messages = []; currentPhase = 1;
-  document.getElementById('messages').innerHTML = '';
-  document.getElementById('phase-badge').classList.remove('phase2');
-  document.getElementById('phase-label').textContent = 'Fase 1 — Mapeamento';
-  ['cf-patient','cf-approach','cf-complaint'].forEach(id => document.getElementById(id).value = '');
-  document.querySelectorAll('.checklist li').forEach(li => { li.classList.remove('done'); li.querySelector('.check-icon').textContent = ''; });
-  sendWelcome();
-}
-
-// ── UI Utils ──────────────────────────────────────────
-function handleKey(e) { if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
+// ═══════════════════════════════════════════════════
+// UI UTILS
+// ═══════════════════════════════════════════════════
+function handleKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();} }
 function autoResize(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,160)+'px'; }
-function toggleCheck(el) {
-  el.classList.toggle('done');
-  el.querySelector('.check-icon').textContent = el.classList.contains('done') ? '✓' : '';
-}
+function toggleCheck(el) { el.classList.toggle('done'); el.querySelector('.check-icon').textContent=el.classList.contains('done')?'✓':''; }
 let toastTimer;
 function showToast(msg) {
-  const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
-  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
 }
 
-// ── Expose to HTML ────────────────────────────────────
-window.startSession = startSession; window.sendMessage = sendMessage;
-window.clearSession = clearSession; window.openExport = openExport;
-window.closeExport = closeExport; window.copyExport = copyExport;
-window.toggleCheck = toggleCheck; window.handleKey = handleKey;
-window.autoResize = autoResize;
-
-// ── Setup keyboard ────────────────────────────────────
-document.getElementById('api-key-input').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('therapist-name-input').focus(); });
-document.getElementById('therapist-name-input').addEventListener('keydown', e => { if(e.key==='Enter') startSession(); });
+document.getElementById('api-key-input').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('therapist-name-input').focus(); });
+document.getElementById('therapist-name-input').addEventListener('keydown', e=>{ if(e.key==='Enter') startSession(); });
 </script>
 </body>
 </html>
